@@ -29,24 +29,14 @@ if [[ -f /usr/share/bash-completion/bash_completion ]]; then
 elif [[ -s /opt/homebrew/etc/profile.d/bash_completion.sh ]]; then
     . /opt/homebrew/etc/profile.d/bash_completion.sh
 fi
-. ~/.git-completion.bash
-
-GIT_PS1_SHOWDIRTYSTATE=1
-GIT_PS1_SHOWSTASHSTATE=1
-GIT_PS1_SHOWUNTRACKEDFILES=1
-GIT_PS1_SHOWCONFLICTSTATE=1
-GIT_PS1_SHOWUPSTREAM=auto
-. ~/.git-prompt.sh
-PS1='\[\e[32m\]\u@\h \[\e[36m\]\W\[\e[0m\]$(__git_ps1 " (%s)")\$ '
+PS1='\u@\h:\W\$ '
 
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'
 # unset JDK_JAVA_OPTIONS
 
-alias ls='ls --color=auto'
 alias grep='grep --color=auto'
-alias gd='git diff'
-alias gs='git status'
+alias ls='ls --color=auto'
 alias vi=nvim
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
 
