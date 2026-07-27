@@ -16,7 +16,7 @@ description: Systematically troubleshoot a bug, error, or unexpected behavior. U
 - Once the repro test passes, confirm the debug-tag grep is empty, then run a full verification pass (`gatekeeper`) before calling it done.
 
 ## Example
-- Good: "500 on checkout." Pull the stack trace, reproduce locally, write a test that fails on the exact error, rank a few hypotheses, bisect/instrument to test them in order, fix, confirm the test passes, then `gatekeeper`.
+- Good: "Worker process crashes with SIGSEGV under load." Pull the stack trace/core dump, reproduce locally, write a test that fails on the exact crash, rank a few hypotheses, bisect/instrument to test them in order, fix, confirm the test passes, then `gatekeeper`.
 - Good: "This started failing after a recent change." Bisect across recent commits to find the one that introduced it before touching any code.
 - Good: bug is in an unfamiliar auth middleware chain. Use `whiteboard` for a trace/diagram of how it currently works, then use that to generate grounded hypotheses instead of guessing.
 - Bad: seeing a `TypeError` in the logs and guessing a fix without reproducing it first.

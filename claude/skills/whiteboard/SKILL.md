@@ -87,10 +87,10 @@ Anything unresolved that needs a decision before/during implementation.
 - Good (explore): "How does a TCP handshake work?" out of curiosity. Answer from your own knowledge, no lookup needed.
 - Good (explore): "Does this endpoint retry on timeout?", a single file to check. Read it yourself.
 - Good (explore): "How does our auth flow work end-to-end?" Trace the middleware file, its callers, and its tests via Grep/Read, then explain with `file:line` refs and a Mermaid sequence diagram.
-- Good (explore): "Can we use `structuredClone` here?" Check the pinned Node/browser version in the manifest, then MDN/the spec for that version, not "latest" docs.
+- Good (explore): "Can we use Python's `tomllib` here?" Check the pinned Python version in the lockfile, then the stdlib docs for that version, not "latest" docs.
 - Good (explore, escalate on demand): "Should we adopt library X over Y?" is a new-dependency decision. Propose escalating to Plan Mode; if the user agrees, continue there instead of designing it here.
 - Good (design): "Add caching." Deep-research Redis vs in-memory vs on-disk, log findings with sources, present pros and cons, and ask which fits before writing the design doc.
-- Good (design): "Upgrade React 17 to 19" is a major upgrade with breaking changes. Research the migration guide, cite it in the findings log, surface the risks, note that `guinea-pig` should apply TDD for the riskiest touched components, then write the doc.
+- Good (design): "Upgrade Postgres 14 to 17" is a major upgrade with breaking changes. Research the release notes, cite it in the findings log, surface the risks, note that `guinea-pig` should apply TDD for the riskiest touched queries/migrations, then write the doc.
 - Skip: renaming a local variable, fixing a typo. Trivial and reversible (see "Decisions"), just do it, no mode needed.
 - Bad: describing behavior from a function or file name alone without opening it.
 - Bad: answering "does this library retry on 429s?" from memory of an older version instead of checking the pinned version's actual source/docs.

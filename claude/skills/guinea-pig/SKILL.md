@@ -10,7 +10,7 @@ description: Write tests (test-first/TDD for risky changes) and manually sanity-
 - More than one plausible interface to test against (e.g. a new module with no established pattern)? Confirm which one before writing tests; an unconfirmed interface risks tests that don't survive review (see "Decisions").
 - Focus coverage on logic that must not break. Tests don't need to be exhaustive.
 - Cover actual behavior and edge cases, not just the happy path.
-- Beyond unit tests, manually sanity-check any change that's user-facing or externally observable. Run the CLI, hit the endpoint, exercise the UI flow yourself; don't rely on unit tests alone.
+- Beyond unit tests, manually sanity-check any change that's user-facing or externally observable. Run the CLI, hit the endpoint, or trigger the job yourself; don't rely on unit tests alone.
 
 ## TDD criteria, decide at Build start
 Applies (write the failing test first, then implement just enough to pass) if the change is any of:
