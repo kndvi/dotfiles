@@ -1,6 +1,6 @@
 ---
 name: whiteboard
-description: Ground any question or claim yourself. Interview the user one question at a time, trace the codebase, and research the web with official/high-reputation sources first, escalating to Plan Mode on demand for a real trade-off decision. Inside Plan Mode, go further with deep research, cited findings, trade-off debate, task breakdown, and a design doc that lines up `guinea-pig`/`gatekeeper` and a TDD call before implementation starts. Auto-triggers for any question worth getting right, not just work decisions: a library's behavior, a pinned dependency's API/version, how existing code works, or a decision with real trade-offs (architecture, a new dependency, a breaking change, a multi-step plan).
+description: Ground any question or claim yourself. Interview the user one question at a time, trace the codebase, and research the web with official/high-reputation sources first, escalating to Plan Mode on demand for a real trade-off decision. Inside Plan Mode, go further with deep research, cited findings, trade-off debate, task breakdown, and a design doc that lines up `guinea-pig`/`gatekeeper` and a TDD call before implementation starts. Auto-triggers for any question worth getting right, not just work decisions — a library's behavior, a pinned dependency's API/version, how existing code works, or a decision with real trade-offs (architecture, a new dependency, a breaking change, a multi-step plan).
 ---
 
 # Whiteboard
