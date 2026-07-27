@@ -1,28 +1,8 @@
 set nocp enc=utf-8 noml noswf nobk title hid
-set incsearch hlsearch ignorecase smartcase
+set incsearch hlsearch ignorecase smartcase nu rnu
 set autoindent showmatch splitright ruler
 set ts=4 sw=0 et ut=256 list wildoptions+=fuzzy
 let &showbreak = '+++ '
-
-" extend vim grep abilities with ripgrep
-if executable('rg')
-  set grepprg=rg\ --vimgrep\ --hidden\ -n\ $*
-  set grepformat^=%f:%l:%c:%m
-  " use [--no-ignore] for wildcard
-  nmap <Space>g :silent grep! -S ''<Left>
-  xmap <Space>g "0y:silent grep! -s '<C-r>0'<Left>
-  nmap <Space>G :silent grep! -s '<C-r><C-w>'<CR>
-else
-  set grepprg=grep\ -HIrn\ $*
-  nmap <Space>g :grep! -i ''<Left>
-  xmap <Space>g "0y:grep! '<C-r>0'<Left>
-  nmap <Space>G :grep! '<C-r><C-w>'<CR>
-endif
-
-" browse buffers/files
-nmap <Space>o <Cmd>ls t<CR>:buffer 
-nmap - <Cmd>Explore<CR>
-au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 
 " :find command should search files
 func! s:findfiles(cmdarg, _cmdcomp) abort
@@ -44,9 +24,14 @@ command! -nargs=1 -complete=customlist,<SID>gitfiles GFiles
       \ exe 'edit ' . fnameescape(<q-args>)
 nmap <Space>s :GFiles <C-z>
 
-" open the quickfix window whenever a qf command is executed
-au QuickFixCmdPost [^l]* cwindow
-au FileType vim setl tabstop=2
+" extend vim grep abilities with ripgrep
+set grepprg=grep\ -HIrn\ $*
+if executable('rg')
+  set grepprg=rg\ --vimgrep\ --hidden\ -n\ $*
+endif " use [--no-ignore] for wildcard
+nmap <Space>g :grep! -i ''<Left>
+xmap <Space>g "0y:grep! '<C-r>0'<Left>
+nmap <Space>G :grep! '<C-r><C-w>'<CR>
 
 " yank/paste to/from system clipboard
 " all motions work the same as normal [y]
@@ -56,7 +41,17 @@ nmap <Space>p "+p
 xmap <Space>p "+p
 nmap <Space>P "+P
 
+" browse buffers/files
+nmap <Space>o <Cmd>ls t<CR>:buffer 
+nmap - <Cmd>Explore<CR>
+au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
+
+" open the quickfix window whenever a qf command is executed
+au QuickFixCmdPost [^l]* cwindow
+au FileType vim setl tabstop=2
+
 if has('nvim')
+  au FileType qf,netrw setl cc=
   au TextYankPost * silent! lua vim.hl.on_yank()
   lua vim.filetype.add{pattern={['.*%.log.*']='messages'}, extension={psql='sql'}}
 
@@ -66,7 +61,7 @@ if has('nvim')
   let g:loaded_python3_provider = 0
   let g:loaded_ruby_provider = 0
   let g:loaded_matchit = 1
-  set undofile cursorline inccommand=split
+  set undofile cc=80 inccommand=split
   set completeopt+=menuone,noselect
 
   " copy file name/path
@@ -74,5 +69,6 @@ if has('nvim')
   nmap <Space>n <Cmd>let @+=expand('%')<Bar>echo 'filename yanked'<CR>
 
   " load lua stuff
+  lua require'diffsign'
   lua require'langserver'
 endif

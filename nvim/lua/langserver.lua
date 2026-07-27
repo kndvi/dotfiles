@@ -6,7 +6,6 @@ vim.lsp.config('*', {
         vim.lsp.inlay_hint.enable(true)
 
         -- see [:help vim.lsp.*] for documentation
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, {buffer=bufnr})
         vim.keymap.set('n', 'gru', function()
             vim.lsp.buf.references{includeDeclaration=false}
         end, {buffer=bufnr}) -- show usages only
