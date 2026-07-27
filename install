@@ -7,8 +7,7 @@ REPO_URL="https://github.com/kdnvi/dotfiles.git"
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo dnf update -y
-        sudo dnf install -y git bash tmux neovim ripgrep tree ncdu htop jq pandoc
+        sudo dnf update -y && sudo dnf install -y git bash tmux tree ncdu htop jq ctags pandoc
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -21,8 +20,7 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux neovim ripgrep tree ncdu htop jq pandoc \
-            bash-completion@2
+        brew install git bash tmux tree ncdu htop jq universal-ctags pandoc bash-completion@2
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
@@ -34,7 +32,7 @@ echo '> cloning dotfiles'
 [ -d "$DOTFILES_DIR/.git" ] || git clone "$REPO_URL" "$DOTFILES_DIR"
 
 echo '> linking dotfiles'
-ln -sfn "$DOTFILES_DIR/nvim" ~/.config/nvim
+ln -sfn "$DOTFILES_DIR/.vimrc" ~/.vimrc
 ln -sfn "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
 ln -sfn "$DOTFILES_DIR/.gitignore" ~/.gitignore
 ln -sfn "$DOTFILES_DIR/.psqlrc" ~/.psqlrc
@@ -56,8 +54,8 @@ echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore
 git config --global push.autoSetupRemote true
 git config --global pull.rebase true
-git config --global diff.tool nvimdiff
-git config --global merge.tool nvimdiff
+git config --global diff.tool vimdiff
+git config --global merge.tool vimdiff
 git config --global mergetool.keepBackup false
 
 [ "${SHELL##*/}" = bash ] && { echo '* default shell is already bash'; exit 0; }

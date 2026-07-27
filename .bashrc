@@ -4,8 +4,9 @@
 
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
-export EDITOR=nvim
-export VISUAL=nvim
+
+export EDITOR=vim
+export VISUAL=vim
 
 # additional binaries
 export PATH="$HOME/.local/bin:$PATH"
@@ -37,7 +38,6 @@ PS1='\u@\h:\W\$ '
 
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
-alias vi=nvim
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
 
 # source local config
