@@ -7,8 +7,8 @@ REPO_URL="https://github.com/kdnvi/dotfiles.git"
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo apt update -y
-        sudo apt install -y git bash tmux neovim ripgrep tree ncdu htop jq pandoc
+        sudo dnf update -y
+        sudo dnf install -y git bash tmux neovim ripgrep tree ncdu htop jq pandoc
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
