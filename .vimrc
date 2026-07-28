@@ -63,6 +63,7 @@ nmap <Space>n <Cmd>let @+=expand('%')<Bar>echo 'filename yanked'<CR>
 
 " open the quickfix window whenever a qf command is executed
 au QuickFixCmdPost [^l]* cwindow
+au FileType bash,sh setl ts=4 et
 nmap <C-l> <Cmd>noh<Bar>dif!<Bar>redr!<CR>
 
 " browse buffers/files
@@ -85,6 +86,7 @@ augroup JavaConfig
 augroup END
 
 " load useful optional packs
+runtime ftplugin/man.vim
 packadd comment
 packadd hlyank
 packadd! editorconfig
