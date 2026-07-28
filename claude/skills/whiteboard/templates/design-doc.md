@@ -1,6 +1,6 @@
 Date: YYYY-MM-DD
 
-# `<Title>`
+# <Title>
 
 ## Goal
 What outcome this achieves and why it's needed.
