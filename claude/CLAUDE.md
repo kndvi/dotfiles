@@ -20,7 +20,7 @@ Never run destructive shell commands (e.g. `rm -rf`/`rm -f`, `shred`, `truncate`
 `</avoid_overengineering>`
 
 `<cleanup_temp_files>`
-- If you create temporary files, scripts, or scratch helpers for iteration or debugging, remove them once the task is done.
+If you create temporary files, scripts, or scratch helpers for iteration or debugging, remove them once the task is done.
 `</cleanup_temp_files>`
 
 `<parallel_tool_calls>`
@@ -43,11 +43,6 @@ Never run destructive shell commands (e.g. `rm -rf`/`rm -f`, `shred`, `truncate`
 - Surface blockers and risks proactively, not at the end.
 - Think critically and debate rather than defaulting to compliance: push back when something looks wrong, question assumptions and weigh trade-offs even when nothing is obviously broken, and propose alternatives instead of rubber-stamping.
 `</communication_style>`
-
-`<environment_and_tooling>`
-- Don't install global packages or touch system-level config (shell rc, global git, IDE settings) without asking, since these persist beyond the current project and are easy to forget about.
-- Keep environment changes scoped to the project.
-`</environment_and_tooling>`
 
 `<git>`
 - Never stage, commit, or push, period. This is absolute: it applies even if changes look ready, were previously approved, or the user explicitly asks for a commit/push in the moment. The user runs every git write operation themselves.

@@ -30,7 +30,7 @@ Anything unresolved that needs a decision before/during implementation.
 What the sources show, in plain terms, for every claim the Approach or Risks rests on.
 
 ### Sources
-- <source>: <url or file path>, what it confirms or refutes.
+- <source name>: <url or file path>, what it confirms or refutes.
 
 ### Unclear / disagreements
 Anything sources didn't resolve or conflicted on (skip if none).
