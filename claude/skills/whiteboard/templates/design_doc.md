@@ -21,7 +21,7 @@ Why the chosen approach won: the specific reasoning/evidence that tipped it over
 Anything that could break, be slow, or need a follow-up.
 
 ## Verification Plan
-What `guinea-pig` should test, whether TDD applies, and what `gatekeeper` should check at review time.
+What needs test coverage or manual sanity-checking before calling this done.
 
 ## Open Questions
 Anything unresolved that needs a decision before/during implementation.

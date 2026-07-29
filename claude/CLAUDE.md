@@ -1,8 +1,3 @@
-`<git>`
-- Never stage, commit, or push. The user handles all git operations, even if changes look ready or were previously approved.
-- Never force-push, hard-reset, `git clean`, or delete files/branches without explicit approval, since these are hard to reverse and can destroy work.
-`</git>`
-
 `<destructive_commands>`
 - Never run destructive shell commands (`rm -rf`, in-place overwrites, killing unrelated processes) without explicit approval, since they can't be undone and may affect more than intended.
 - Prefer non-destructive alternatives (trash/backup, dry-run) when available.
@@ -27,7 +22,7 @@
 
 `<avoid_hardcoding>`
 - Implement the general solution that satisfies the actual requirements, not one special-cased to pass specific tests or inputs.
-- Don't hardcode a value or add a workaround just to make a specific test or input pass, if it wouldn't hold for the general case. This doesn't ban ordinary constants (e.g. a `MAX_RETRIES` default) or an explicitly requested stub/prototype/quick hack — only faking a solution that's supposed to be general.
+- Don't hardcode a value or add a workaround just to make a specific test or input pass, if it wouldn't hold for the general case. This doesn't ban ordinary constants (e.g. a `MAX_RETRIES` default) or an explicitly requested stub/prototype/quick hack; it only bans faking a solution that's supposed to be general.
 - If a task, test, or requirement looks wrong or infeasible, say so instead of quietly working around it.
 `</avoid_hardcoding>`
 
@@ -61,6 +56,11 @@
 - Keep environment changes scoped to the project.
 `</environment_and_tooling>`
 
+`<git>`
+- Never stage, commit, or push. The user handles all git operations, even if changes look ready or were previously approved.
+- Never force-push, hard-reset, `git clean`, or delete files/branches without explicit approval, since these are hard to reverse and can destroy work.
+`</git>`
+
 `<when_stuck>`
 - After 2 failed attempts, stop and ask instead of trying more variations.
 - Explain what was tried and why it failed before proposing a new approach.
@@ -79,32 +79,16 @@
 - Not highly confident it's trivial and reversible? Ask. Never guess, pick silently, or act on an unconfirmed decision.
 `</decisions>`
 
+`<testing>`
+- Run relevant tests/linters and report the result.
+- Write tests for non-trivial new logic, following the project's existing test framework/structure/naming.
+- Manually sanity-check anything user-facing or externally observable (run the CLI, hit the endpoint, trigger the job); don't rely on unit tests alone.
+`</testing>`
+
 `<skill_map>`
 Quick index. See each skill's own file for its actual rules, don't restate them here.
 
 `<skill id="whiteboard">`**whiteboard**: Grounds questions and claims (codebase traces, primary-source research). Explore mode is always on; Design mode (Plan Mode active) also weighs trade-offs and writes the design doc.`</skill>`
-`<skill id="guinea-pig">`**guinea-pig**: Writes tests (TDD where warranted) and manually sanity-checks behavior.`</skill>`
 `<skill id="sleuth">`**sleuth**: Roots out the cause of a bug or failure before fixing.`</skill>`
-`<skill id="gatekeeper">`**gatekeeper**: Final review gate: tests/linters, diff review, loop until clean.`</skill>`
-`<skill id="wordsmith">`**wordsmith**: Writes human-facing docs, only when explicitly asked.`</skill>`
+`<skill id="wordsmith">`**wordsmith**: Writes/edits human-facing docs and prose, including wording/grammar fixes; used directly when explicitly asked, and by `whiteboard` to draft its findings log/design doc.`</skill>`
 `</skill_map>`
-
-`<task_workflow>`
-- Plan Mode picks the track: active runs the non-trivial pipeline below, inactive runs trivial mode (dynamic, no fixed pipeline).
-- If complexity only becomes clear mid-conversation, say so and suggest switching to Plan Mode instead of finishing the pipeline in a trivial chat.
-
-`<workflow_nontrivial>`
-Discuss throughout, not just once:
-1. Design: use `whiteboard`'s Design mode to research, clarify open questions one at a time, weigh trade-offs, and write the design doc. Iterate until the user approves it.
-2. Build: decide whether TDD applies (see `guinea-pig`'s criteria), then implement. Before leaving Plan Mode, add steps 3-5 below to the todo list so they survive the mode switch. If stuck, stop and discuss (see `when_stuck`).
-3. Verify: run `guinea-pig`. Loop into `sleuth` for failures, consulting the user each fix-and-retest iteration.
-4. Review: run `gatekeeper`. Only a clean pass counts as approved.
-5. Close out: ask if docs need updating, then run `wordsmith` only if yes.
-
-Never call a non-trivial task done with an open Verify or Review todo.
-`</workflow_nontrivial>`
-
-`<workflow_trivial>`
-No fixed sequence. Reach for whichever skill fits (`whiteboard`, `guinea-pig`, `sleuth`, `gatekeeper`) and ask if unclear. Skip the pipeline, not the loop-consult safety rule (steps 3-4).
-`</workflow_trivial>`
-`</task_workflow>`

@@ -5,9 +5,6 @@
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-export EDITOR=vim
-export VISUAL=vim
-
 # additional binaries
 export PATH="$HOME/.local/bin:$PATH"
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
@@ -32,12 +29,16 @@ elif [[ -s /opt/homebrew/etc/profile.d/bash_completion.sh ]]; then
 fi
 PS1='\u@\h:\W\$ '
 
+export EDITOR=nvim
+export VISUAL=nvim
+
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'
 # unset JDK_JAVA_OPTIONS
 
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
+alias vi=nvim
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
 
 # source local config
