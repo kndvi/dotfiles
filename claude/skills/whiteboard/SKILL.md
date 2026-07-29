@@ -12,7 +12,7 @@ Plan Mode gates two tiers of the same skill. Design mode fully inherits Explore 
 - Clarifying with the user? Ask one question at a time with a recommended answer attached (see `decisions`).
 - Codebase question, like architecture, call flow, "how does X work", or a diagram? Trace the actual code path via Grep/Glob/Read: entry point, callers, callees, tests. Cite `file:line`. Draw a Mermaid diagram for structure or flow questions.
 - External question about a library, an API, docs, or general research? Search the web and trace claims to primary sources, ranked official docs/spec first, then source code, then a reputable write-up, then a random blog last. Match the version actually pinned in the lockfile or manifest, not "latest".
-- Before researching, check `~/work/notes/plans/` and `~/work/notes/research/` for a prior hit. Reuse it only after checking the library/dependency version or code referenced still matches what's in use now; re-research anything that's drifted or missing.
+- Before researching, check existing plans for a prior hit (an existing plan's Findings section may already answer this). Reuse it only after checking the library/dependency version or code referenced still matches what's in use now; re-research anything that's drifted or missing.
 - Synthesize, don't dump. State what it means, what's still unclear, and flag disagreements between sources instead of picking one silently.
 - Still unsure after checking primary sources? Ask the user. Never guess.
 - Turns out to be a decision with real trade-offs (architecture, a new dependency, a breaking change, a multi-step plan)? Don't design it here. Propose escalating to Plan Mode and let the user decide. If they decline, give your best answer but flag it as a design question, not a checked fact.
@@ -22,22 +22,16 @@ Plan Mode gates two tiers of the same skill. Design mode fully inherits Explore 
 `<design_mode>`
 Inherits everything above, plus:
 - Trigger: architecture, performance, compatibility, maintainability, a new dependency/major upgrade, or a breaking change to a public API/schema/config (see `decisions`: never trivial and reversible).
-- Go deeper. Every claim the design's Approach or Risks rests on must be researched and saved to the findings log below; no unsupported claims.
+- Go deeper. Every claim the design's Approach or Risks rests on must be researched and recorded in the doc's Findings section (below); no unsupported claims.
 - Debate trade-offs out loud. Present every viable option with its pros and cons and never pick a non-trivial one unilaterally. Prefer a library already used in the project unless you state a specific reason not to.
 - Iterate with the user until they give an explicit final decision. One unconfirmed proposal isn't a decision.
 - Break the task down and write it up as a design doc (below), with a Verification Plan that covers `testing` and anything else worth checking.
 `</design_mode>`
 
-`<findings_log>`
-Save non-trivial research (skip for a quick one-off) to `~/work/notes/research/<snake_case_slug>.md` (prefix a ticket ID if one exists, e.g. `TICKET-123_slug.md`), following the shape in [templates/findings_log.md](templates/findings_log.md). Use `wordsmith` to draft the entry's prose: narrative for the Findings summary, explicit and precise for Sources and any version numbers/specifics.
-
-Append to an existing file only for the same question revisited; a different question gets a new file. Before appending, skim the existing entry: split it by topic instead of adding another entry if it's grown past 5 entries or spans unrelated sub-questions.
-`</findings_log>`
-
 `<design_doc>`
-Always write it to `~/work/notes/plans/<snake_case_slug>.md`, no other location (prefix a ticket ID if one exists). On revision, edit the existing file instead of creating a new one. Cite the findings log by file/entry wherever the design relies on it, instead of re-pasting or re-asserting the findings here. Use `wordsmith` to draft the prose: narrative for Goal/Context/Design Decision, explicit and precise for Approach/Risks/Verification Plan.
+Always save it alongside the agent's other plan files, named `<snake_case_slug>.md` (prefix a ticket ID if one exists). On revision, edit the existing file instead of creating a new one. Use `wordsmith` to draft the prose: narrative for Goal/Context/Design Decision, explicit and precise for Approach/Risks/Verification Plan/Findings.
 
-Every section in [templates/design_doc.md](templates/design_doc.md) is required. Don't omit one to save time; if a section genuinely doesn't apply (e.g. no viable alternative existed), say so explicitly rather than dropping it, so the doc has a complete shape.
+Every section in [templates/design_doc.md](templates/design_doc.md) is required, including Findings for every claim the Approach or Risks rests on. Don't omit a section to save time; if one genuinely doesn't apply (e.g. no viable alternative existed), say so explicitly rather than dropping it, so the doc has a complete shape.
 `</design_doc>`
 
 `<examples>`
@@ -47,7 +41,7 @@ Every section in [templates/design_doc.md](templates/design_doc.md) is required.
 `<example>`Good (explore): "Can we use Python's `tomllib` here?" Check the pinned Python version in the lockfile, then the stdlib docs for that version, not "latest" docs.`</example>`
 `<example>`Good (explore, escalate on demand): "Should we adopt library X over Y?" is a new-dependency decision. Propose escalating to Plan Mode; if the user agrees, continue there instead of designing it here.`</example>`
 `<example>`Good (design): "Add caching." Deep-research Redis vs in-memory vs on-disk, log findings with sources, present pros and cons, and ask which fits before writing the design doc.`</example>`
-`<example>`Good (design): "Upgrade Postgres 14 to 17" is a major upgrade with breaking changes. Research the release notes, cite it in the findings log, surface the risks, flag which touched queries/migrations need dedicated test coverage, then write the doc.`</example>`
+`<example>`Good (design): "Upgrade Postgres 14 to 17" is a major upgrade with breaking changes. Research the release notes, record it in the doc's Findings section, surface the risks, flag which touched queries/migrations need dedicated test coverage, then write the doc.`</example>`
 `<example>`Skip: renaming a local variable, fixing a typo. Trivial and reversible (see `decisions`), just do it, no mode needed.`</example>`
 `<example>`Bad: answering "does this library retry on 429s?" from memory of an older version instead of checking the pinned version's actual source/docs.`</example>`
 `<example>`Bad: designing a real trade-off decision while Plan Mode is inactive instead of proposing the escalation first.`</example>`

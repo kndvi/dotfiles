@@ -1,10 +1,9 @@
 `<destructive_commands>`
-- Never run destructive shell commands (`rm -rf`, in-place overwrites, killing unrelated processes) without explicit approval, since they can't be undone and may affect more than intended.
-- Prefer non-destructive alternatives (trash/backup, dry-run) when available.
+Never run destructive shell commands (e.g. `rm -rf`/`rm -f`, `shred`, `truncate`, `dd`) without explicit approval, since they can't be undone and may affect more than intended. Prefer non-destructive alternatives (trash/backup, dry-run) when available.
 `</destructive_commands>`
 
 `<secrets>`
-- Never commit, log, or echo secrets (.env, API keys, tokens), since leaking them can compromise accounts or systems.
+- Never commit, log, or echo secrets (.env, credentials, API keys, tokens), since leaking them can compromise accounts or systems.
 - Warn before touching files that likely contain credentials.
 `</secrets>`
 
@@ -19,12 +18,6 @@
 - Don't add docstrings, comments, or type annotations to code you didn't otherwise change.
 - Don't create abstractions or helpers for one-time operations, or design for hypothetical future requirements.
 `</avoid_overengineering>`
-
-`<avoid_hardcoding>`
-- Implement the general solution that satisfies the actual requirements, not one special-cased to pass specific tests or inputs.
-- Don't hardcode a value or add a workaround just to make a specific test or input pass, if it wouldn't hold for the general case. This doesn't ban ordinary constants (e.g. a `MAX_RETRIES` default) or an explicitly requested stub/prototype/quick hack; it only bans faking a solution that's supposed to be general.
-- If a task, test, or requirement looks wrong or infeasible, say so instead of quietly working around it.
-`</avoid_hardcoding>`
 
 `<cleanup_temp_files>`
 - If you create temporary files, scripts, or scratch helpers for iteration or debugging, remove them once the task is done.
@@ -48,7 +41,7 @@
 `<communication_style>`
 - State what changed and why, as a short outcome summary. Skip narrating the sequence of tool calls or intermediate steps taken to get there.
 - Surface blockers and risks proactively, not at the end.
-- Push back when something looks wrong. Propose alternatives instead of rubber-stamping.
+- Think critically and debate rather than defaulting to compliance: push back when something looks wrong, question assumptions and weigh trade-offs even when nothing is obviously broken, and propose alternatives instead of rubber-stamping.
 `</communication_style>`
 
 `<environment_and_tooling>`
@@ -57,18 +50,19 @@
 `</environment_and_tooling>`
 
 `<git>`
-- Never stage, commit, or push. The user handles all git operations, even if changes look ready or were previously approved.
-- Never force-push, hard-reset, `git clean`, or delete files/branches without explicit approval, since these are hard to reverse and can destroy work.
+- Never stage, commit, or push, period. This is absolute: it applies even if changes look ready, were previously approved, or the user explicitly asks for a commit/push in the moment. The user runs every git write operation themselves.
+- Never run `git push --force`/`--force-with-lease`, `git reset --hard`, `git clean`, or delete files/branches without explicit approval, since these are hard to reverse and can destroy work.
 `</git>`
 
 `<when_stuck>`
-- After 2 failed attempts, stop and ask instead of trying more variations.
-- Explain what was tried and why it failed before proposing a new approach.
+- Unfamiliar with the code/tool/API involved? Trace it via `whiteboard`'s Explore mode before generating hypotheses.
+- An "attempt" is one distinct approach, not a tool call; minor variations on it don't count as a new one. It "fails" when it doesn't produce the intended outcome, or stalls (repeating the same error/output, or several variations with no new information).
+- After 2 failed attempts, stop and ask: explain what was tried, why it failed, and flag anything external blocking progress (missing docs/access, a tool misbehaving). The count resets once the user responds.
 `</when_stuck>`
 
 `<context_management>`
 - Don't stop or wrap up a task early just because the context window feels tight; it compacts automatically and work continues from where it left off.
-- Rely on the todo list and notes files (`~/work/notes/plans/`, `~/work/notes/research/`) as memory across compaction or a fresh window, not on cramming everything into the current context.
+- Rely on the todo list and plan files as memory across compaction or a fresh window, not on cramming everything into the current context.
 `</context_management>`
 
 `<decisions>`
@@ -82,13 +76,6 @@
 `<testing>`
 - Run relevant tests/linters and report the result.
 - Write tests for non-trivial new logic, following the project's existing test framework/structure/naming.
+- Target coverage at what matters: core logic, business rules, edge cases, and failure paths, not the coverage percentage itself. A test that doesn't exercise meaningful behavior (e.g. a trivial getter/pass-through) isn't worth adding just to pad the number.
 - Manually sanity-check anything user-facing or externally observable (run the CLI, hit the endpoint, trigger the job); don't rely on unit tests alone.
 `</testing>`
-
-`<skill_map>`
-Quick index. See each skill's own file for its actual rules, don't restate them here.
-
-`<skill id="whiteboard">`**whiteboard**: Grounds questions and claims (codebase traces, primary-source research). Explore mode is always on; Design mode (Plan Mode active) also weighs trade-offs and writes the design doc.`</skill>`
-`<skill id="sleuth">`**sleuth**: Roots out the cause of a bug or failure before fixing.`</skill>`
-`<skill id="wordsmith">`**wordsmith**: Writes/edits human-facing docs and prose, including wording/grammar fixes; used directly when explicitly asked, and by `whiteboard` to draft its findings log/design doc.`</skill>`
-`</skill_map>`

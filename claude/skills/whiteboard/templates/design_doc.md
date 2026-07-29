@@ -25,3 +25,12 @@ What needs test coverage or manual sanity-checking before calling this done.
 
 ## Open Questions
 Anything unresolved that needs a decision before/during implementation.
+
+## Findings
+What the sources show, in plain terms, for every claim the Approach or Risks rests on.
+
+### Sources
+- <source>: <url or file path>, what it confirms or refutes.
+
+### Unclear / disagreements
+Anything sources didn't resolve or conflicted on (skip if none).
