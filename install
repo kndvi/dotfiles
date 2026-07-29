@@ -1,14 +1,10 @@
 #!/bin/sh
 set -eu
-
-DOTFILES_DIR="$HOME/dotfiles"
-REPO_URL="https://github.com/kdnvi/dotfiles.git"
-
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo apt update -y
-        sudo apt install -y git bash tmux neovim tree ncdu htop jq universal-ctags pandoc mutt
+        sudo dnf update -y
+        sudo dnf install -y git bash tmux neovim tree ncdu htop jq ctags pandoc mutt sway
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -29,27 +25,24 @@ esac
 echo '> creating essential dirs'
 mkdir -p ~/.config ~/work ~/lab
 
-echo '> cloning dotfiles'
-[ -d "$DOTFILES_DIR/.git" ] || git clone "$REPO_URL" "$DOTFILES_DIR"
-
 echo '> linking dotfiles'
-ln -sfn "$DOTFILES_DIR/nvim" ~/.config/nvim
-ln -sfn "$DOTFILES_DIR/.tmux.conf" ~/.tmux.conf
-ln -sfn "$DOTFILES_DIR/.gitignore" ~/.gitignore
-ln -sfn "$DOTFILES_DIR/.psqlrc" ~/.psqlrc
-ln -sfn "$DOTFILES_DIR/.bashrc" ~/.bashrc
+ln -sfn "$(pwd)/nvim" ~/.config/nvim
+ln -sfn "$(pwd)/.tmux.conf" ~/.tmux.conf
+ln -sfn "$(pwd)/.gitignore" ~/.gitignore
+ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
+ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
 
 echo '> linking bin scripts'
 mkdir -p ~/.local/bin
-for f in "$DOTFILES_DIR/localbin"/*; do
+for f in "$(pwd)/localbin"/*; do
     ln -sfn "$f" "$HOME/.local/bin/$(basename "$f")"
 done
 
 echo '> configuring llm agents'
 mkdir -p ~/.claude
-ln -sfn "$DOTFILES_DIR/claude/CLAUDE.md" ~/.claude/CLAUDE.md
-ln -sfn "$DOTFILES_DIR/claude/skills" ~/.claude/skills
+ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -sfn "$(pwd)/claude/skills" ~/.claude/skills
 
 echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore
