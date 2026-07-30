@@ -4,7 +4,7 @@ echo '> installing essential packages'
 case $(uname -s) in
     Linux)
         sudo dnf update -y
-        sudo dnf install -y git bash tmux neovim tree ncdu htop jq ctags pandoc mutt sway
+        sudo dnf install -y git bash tmux neovim tree ncdu htop jq pandoc mutt sway
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -17,7 +17,7 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux neovim tree ncdu htop jq universal-ctags pandoc bash-completion@2
+        brew install git bash tmux neovim tree ncdu htop jq pandoc bash-completion@2
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
@@ -27,6 +27,7 @@ mkdir -p ~/.config ~/work ~/lab
 
 echo '> linking dotfiles'
 ln -sfn "$(pwd)/sway" ~/.config/sway
+ln -sfn "$(pwd)/foot" ~/.config/foot
 ln -sfn "$(pwd)/nvim" ~/.config/nvim
 ln -sfn "$(pwd)/.tmux.conf" ~/.tmux.conf
 ln -sfn "$(pwd)/.gitignore" ~/.gitignore
