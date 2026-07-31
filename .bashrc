@@ -27,10 +27,11 @@ if [[ -f /usr/share/bash-completion/bash_completion ]]; then
 elif [[ -s /opt/homebrew/etc/profile.d/bash_completion.sh ]]; then
     . /opt/homebrew/etc/profile.d/bash_completion.sh
 fi
-PS1='\u@\h:\W\$ '
+PS1='\u@\h:\[\e[36m\]\W\[\e[0m\]\$ '
 
-export EDITOR=nvim
-export VISUAL=nvim
+export EDITOR=vim
+export VISUAL=vim
+export MANPAGER="vim +MANPAGER --not-a-term -"
 
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'
@@ -38,7 +39,6 @@ export VISUAL=nvim
 
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
-alias vi=nvim
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
 
 # source local config

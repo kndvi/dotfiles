@@ -3,8 +3,8 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo dnf update -y
-        sudo dnf install -y git bash tmux neovim tree ncdu htop jq pandoc mutt sway
+        sudo dnf upgrade -y
+        sudo dnf install -y git bash tmux tree ncdu htop ctags jq pandoc mutt sway
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -17,7 +17,7 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux neovim tree ncdu htop jq pandoc bash-completion@2
+        brew install git bash tmux tree ncdu htop universal-ctags jq pandoc bash-completion@2
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
@@ -28,7 +28,7 @@ mkdir -p ~/.config ~/work ~/lab
 echo '> linking dotfiles'
 ln -sfn "$(pwd)/sway" ~/.config/sway
 ln -sfn "$(pwd)/foot" ~/.config/foot
-ln -sfn "$(pwd)/nvim" ~/.config/nvim
+ln -sfn "$(pwd)/.vimrc" ~/.vimrc
 ln -sfn "$(pwd)/.tmux.conf" ~/.tmux.conf
 ln -sfn "$(pwd)/.gitignore" ~/.gitignore
 ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
@@ -50,8 +50,8 @@ echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore
 git config --global push.autoSetupRemote true
 git config --global pull.rebase true
-git config --global diff.tool nvimdiff
-git config --global merge.tool nvimdiff
+git config --global diff.tool vimdiff
+git config --global merge.tool vimdiff
 git config --global mergetool.keepBackup false
 
 [ "${SHELL##*/}" = bash ] && { echo '* default shell is already bash'; exit 0; }
