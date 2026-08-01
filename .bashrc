@@ -31,7 +31,6 @@ PS1='\u@\h:\[\e[36m\]\W\[\e[0m\]\$ '
 
 export EDITOR=vim
 export VISUAL=vim
-export MANPAGER="vim +MANPAGER --not-a-term -"
 
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'

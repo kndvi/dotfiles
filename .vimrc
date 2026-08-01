@@ -2,7 +2,7 @@ set nocp enc=utf-8 noml noswf nobk title hid re=2 ar
 set shiftwidth=0 autoindent showmatch splitright
 set incsearch hlsearch ignorecase smartcase smarttab
 set mouse=a mousem=popup_setpos ruler
-set list lcs=tab:>\ ,trail:-,nbsp:+
+set list lcs=tab:>\ ,trail:-,nbsp:+ pt=<F2>
 set wildoptions=pum,tagfile,fuzzy wcm=<C-z>
 let &showbreak = '+++ '
 filetype plugin indent on
@@ -49,6 +49,14 @@ func! s:gentags() abort
 	echo 'generating tags, job: ' . l:job
 endfunc
 command! -nargs=0 Ctags call <SID>gentags()
+
+" yank/paste to/from system clipboard
+" all motions work the same as normal [y]
+nmap <Space>y "+y
+xmap <Space>y "+y
+nmap <Space>p "+p
+xmap <Space>p "+p
+nmap <Space>P "+P
 
 " copy file name/path
 nmap <Space>N <Cmd>let @+=expand('%:p')<Bar>echo 'filepath yanked'<CR>

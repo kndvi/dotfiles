@@ -3,8 +3,8 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo dnf upgrade -y
-        sudo dnf install -y git bash tmux tree ncdu htop ctags jq pandoc mutt sway
+        sudo apt-get update && sudo apt-get upgrade -y
+        sudo apt-get install -y git bash tmux tree ncdu htop universal-ctags jq pandoc mutt sway
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
