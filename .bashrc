@@ -12,6 +12,7 @@ export PATH="$HOME/.local/bin:$PATH"
 stty -ixon # disable flow control protocol xon/xoff (transmit on/off)
 set -o ignoreeof # don't exit shell on ctrl-d
 
+# M-* key is very helpful to extend current glob
 shopt -s dirspell cdspell
 shopt -s autocd globstar
 shopt -s checkwinsize
