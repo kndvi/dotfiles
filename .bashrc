@@ -35,6 +35,7 @@ export VISUAL=vim
 
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'
+# jdb -connect "com.sun.jdi.SocketAttach:hostname=localhost,port=5005"
 # unset JDK_JAVA_OPTIONS
 
 alias grep='grep --color=auto'

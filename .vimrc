@@ -1,12 +1,13 @@
 set nocp enc=utf-8 noml noswf nobk title hid re=2 ar
 set shiftwidth=0 autoindent showmatch splitright
 set incsearch hlsearch ignorecase smartcase smarttab
-set mouse=a mousem=popup_setpos ruler
 set list lcs=tab:>\ ,trail:-,nbsp:+ pt=<F2>
 set wildoptions=pum,tagfile,fuzzy wcm=<C-z>
 let &showbreak = '+++ '
+set mouse=a mousem=popup_setpos ruler cul nu rnu
 filetype plugin indent on
 syntax enable
+silent! colorscheme unokai
 
 " extend vim grep abilities with git-grep
 call system('git rev-parse --is-inside-work-tree &>/dev/null')
