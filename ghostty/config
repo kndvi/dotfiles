@@ -1,13 +1,16 @@
+theme = "Terminal Basic Dark"
 font-feature = "-calt, -liga, -dlig"
 font-family = Menlo
-font-family = monospace
 font-thicken = true
 font-size = 17
-theme = "Terminal Basic Dark"
-copy-on-select = true
 maximize = true
 shell-integration-features = no-cursor
 macos-option-as-alt = true
+
+keybind = alt+h=goto_split:left
+keybind = alt+j=goto_split:bottom
+keybind = alt+k=goto_split:top
+keybind = alt+l=goto_split:right
 
 keybind = alt+1=goto_tab:1
 keybind = alt+2=goto_tab:2

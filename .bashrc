@@ -9,8 +9,10 @@ export LANG=en_US.UTF-8
 export PATH="$HOME/.local/bin:$PATH"
 [ -d /opt/homebrew/bin ] && export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$PATH"
 
-stty -ixon # disable flow control protocol xon/xoff (transmit on/off)
-set -o ignoreeof # don't exit shell on ctrl-d
+# don't exit shell on ctrl-d; disable for now though
+# set -o ignoreeof
+# disable flow control protocol xon/xoff (transmit on/off)
+stty -ixon
 
 # M-* key is very helpful to extend current glob
 shopt -s dirspell cdspell

@@ -4,9 +4,8 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo apt-get update && sudo apt-get upgrade -y
-        sudo apt-get install -y git bash tree ncdu htop universal-ctags jq pandoc mutt sway
-        sudo snap install ghostty --classic
+        sudo dnf upgrade -y
+        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -25,17 +24,15 @@ case $(uname -s) in
 esac
 
 echo '> linking dotfiles'
-mkdir -p ~/.config
+mkdir -p ~/.config ~/work ~/lab ~/.claude
 ln -sfn "$(pwd)/sway" ~/.config/sway
+ln -sfn "$(pwd)/foot" ~/.config/foot
 ln -sfn "$(pwd)/.vimrc" ~/.vimrc
 ln -sfn "$(pwd)/ghostty" ~/.config/ghostty
 ln -sfn "$(pwd)/.gitignore" ~/.gitignore
 ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
-
-echo '> configuring llm agents'
-mkdir -p ~/.claude
 ln -sfn "$(pwd)/claude.md" ~/.claude/CLAUDE.md
 
 echo '> configuring git'
