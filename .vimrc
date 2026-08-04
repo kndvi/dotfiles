@@ -81,13 +81,25 @@ packadd! editorconfig
 
 " better man :)
 runtime ftplugin/man.vim
-let g:ft_man_open_mode = 'vert'
 set keywordprg=:Man
 
-" java stuff
+" c/cpp
+augroup CcppConfig
+	au!
+	if has('mac')
+		au FileType c,cpp setl path=.,/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/include,,
+	endif
+
+	if !empty(findfile('CMakeLists.txt', '.;'))
+		au FileType c,cpp setl makeprg=cmake\ -S\ .\ -B\ build\ &&\ cmake\ --build\ build
+	endif
+augroup END
+
+" java
 augroup JavaConfig
 	au!
 	au FileType java setl tabstop=4 et
+
 	func! s:fqcn() abort
 		let l:class = matchstr(expand('%'), '\v(^|.*/)src/([^/]+/java/)?\zs.+\ze\.java$')
 		if empty(l:class)
@@ -97,4 +109,9 @@ augroup JavaConfig
 		let @+=l:name | echo l:name
 	endfunc
 	au FileType java command! -buffer -nargs=0 Fqcn call <SID>fqcn()
+
+	if !empty(findfile('pom.xml', '.;'))
+		au FileType java setl makeprg=mvn\ package\ -DskipTests\ -T\ 1C\ -am
+		au FileType java setl errorformat=[ERROR]\ %f:[%l\\,%c]\ %m
+	endif
 augroup END
