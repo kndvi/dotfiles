@@ -36,6 +36,8 @@ ln -sfn "$(pwd)/.gitignore" ~/.gitignore
 ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
+mkdir -p ~/.config/environment.d
+[ -f ~/.config/environment.d/gtk-theme.conf ] || echo 'GTK_THEME=Adwaita:dark' > ~/.config/environment.d/gtk-theme.conf
 ln -sfn "$(pwd)/claude.md" ~/.claude/CLAUDE.md
 
 echo '> configuring git'

@@ -35,7 +35,7 @@ while true; do
         bat_low=false
     fi
 
-    clock=$(date +'%d %b %Y %H:%M')
+    clock=$(date +'%a %d %b %H:%M')
 
     jq -nc --arg net "$net_text" --arg vol "$vol_text" --arg clock "$clock" --argjson scratch "$scratch_count" \
         --arg bat "$bat_text" --argjson bat_low "$bat_low" \
