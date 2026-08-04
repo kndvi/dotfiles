@@ -229,7 +229,7 @@ bar {
     position bottom
 
     # When the status_command prints a new line to stdout, swaybar updates.
-    status_command ~/.config/sway/status.sh
+    status_command ~/.config/sway/status
 
     colors {
         statusline #ffffff
