@@ -5,7 +5,10 @@ echo '> installing essential packages'
 case $(uname -s) in
     Linux)
         sudo dnf upgrade -y
-        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway thunar
+        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway thunar mako chafa imv xdg-utils
+        for mime in image/png image/jpeg image/gif image/webp image/bmp image/tiff image/svg+xml; do
+            xdg-mime default imv.desktop "$mime"
+        done
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {

@@ -15,16 +15,17 @@ while true; do
 
     if [ "$(nmcli -t -f STATE general status)" = "connected" ]; then
         net_text=$(nmcli -t -f NAME connection show --active | head -1)
-        ip_text=$(nmcli -g IP4.ADDRESS connection show "$net_text" | head -1 | cut -d/ -f1)
     else
         net_text="offline"
-        ip_text="-"
     fi
+
+    scratch_count=$(swaymsg -t get_tree | jq -r 'recurse(.nodes[]?) | select(.name=="__i3_scratch") | .floating_nodes | length')
 
     clock=$(date +'%d %b %Y %H:%M')
 
-    jq -nc --arg net "$net_text" --arg ip "$ip_text" --arg vol "$vol_text" --arg clock "$clock" \
-        '[{full_text: $net}, {full_text: $ip}, {full_text: $vol}, {full_text: $clock}]'
+    jq -nc --arg net "$net_text" --arg vol "$vol_text" --arg clock "$clock" --argjson scratch "$scratch_count" \
+        '(if $scratch > 0 then [{full_text: "scratchpad \($scratch)"}] else [] end)
+         + [{full_text: $net}, {full_text: $vol}, {full_text: $clock}]'
     printf ',\n'
 
     sleep 1

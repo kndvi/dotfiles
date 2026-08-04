@@ -4,7 +4,7 @@ set incsearch hlsearch ignorecase smartcase smarttab
 set list lcs=tab:>\ ,trail:-,nbsp:+ pt=<F2>
 set wildoptions=pum,tagfile,fuzzy wcm=<C-z>
 let &showbreak = '+++ '
-set mouse=a mousem=popup_setpos ruler cul nu rnu
+set mouse=a mousem=popup_setpos ruler nu rnu
 filetype plugin indent on
 syntax enable
 silent! colorscheme unokai
