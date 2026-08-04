@@ -5,7 +5,7 @@ echo '> installing essential packages'
 case $(uname -s) in
     Linux)
         sudo dnf upgrade -y
-        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway
+        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway thunar
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {

@@ -17,7 +17,7 @@ set $menu wmenu-run
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in @datadir@/backgrounds/sway/)
-output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png fill
+output * bg /usr/share/backgrounds/sway/Sway_Wallpaper_Blue_2048x1536.png fill
 #
 # Example configuration:
 #
@@ -224,8 +224,7 @@ bar {
     position bottom
 
     # When the status_command prints a new line to stdout, swaybar updates.
-    # The default just shows the current date and time.
-    status_command while date +'%d %b %Y %H:%M'; do sleep 1; done
+    status_command ~/.config/sway/status.sh
 
     colors {
         statusline #ffffff
