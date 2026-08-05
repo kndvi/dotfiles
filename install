@@ -38,7 +38,7 @@ ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
 mkdir -p ~/.config/environment.d
 [ -f ~/.config/environment.d/gtk-theme.conf ] || echo 'GTK_THEME=Adwaita:dark' > ~/.config/environment.d/gtk-theme.conf
-ln -sfn "$(pwd)/claude.md" ~/.claude/CLAUDE.md
+ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
 
 echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore

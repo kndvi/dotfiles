@@ -2,8 +2,7 @@ theme = "Terminal Basic Dark"
 font-feature = "-calt, -liga, -dlig"
 font-family = Menlo
 font-thicken = true
-font-size = 15
-maximize = true
+font-size = 16
 shell-integration-features = no-cursor
 macos-option-as-alt = true
 
