@@ -4,8 +4,10 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo dnf upgrade -y
-        sudo dnf install -y git bash vim-X11 tree ncdu htop ctags jq pandoc mutt sway thunar
+        sudo apt-get update && sudo apt-get upgrade -y
+        sudo apt-get install -y git bash neovim tree ncdu htop ripgrep universal-ctags jq pandoc ghostty mutt
+        echo "disable dash to dock hot-keys on ubuntu"
+        gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -18,31 +20,27 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tree ncdu htop universal-ctags jq pandoc bash-completion@2 ghostty
+        brew install git bash neovim tree ncdu htop ripgrep universal-ctags jq pandoc ghostty bash-completion@2
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
 
 echo '> linking dotfiles'
 mkdir -p ~/.config ~/work ~/lab ~/.claude
-ln -sfn "$(pwd)/sway" ~/.config/sway
-ln -sfn "$(pwd)/foot" ~/.config/foot
-ln -sfn "$(pwd)/.vimrc" ~/.vimrc
+ln -sfn "$(pwd)/nvim" ~/.config/nvim
 ln -sfn "$(pwd)/ghostty" ~/.config/ghostty
 ln -sfn "$(pwd)/.gitignore" ~/.gitignore
 ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
-mkdir -p ~/.config/environment.d
-[ -f ~/.config/environment.d/gtk-theme.conf ] || echo 'GTK_THEME=Adwaita:dark' > ~/.config/environment.d/gtk-theme.conf
 ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
 
 echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore
 git config --global push.autoSetupRemote true
 git config --global pull.rebase true
-git config --global diff.tool vimdiff
-git config --global merge.tool vimdiff
+git config --global diff.tool nvimdiff
+git config --global merge.tool nvimdiff
 git config --global mergetool.keepBackup false
 
 [ "${SHELL##*/}" = bash ] && { echo '* default shell is already bash'; exit 0; }

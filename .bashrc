@@ -32,8 +32,8 @@ elif [[ -s /opt/homebrew/etc/profile.d/bash_completion.sh ]]; then
 fi
 PS1='\u@\h:\[\e[36m\]\W\[\e[0m\]\$ '
 
-export EDITOR=vim
-export VISUAL=vim
+export EDITOR=nvim
+export VISUAL=nvim
 
 # don't uncomment, just notes for running java debug
 # export JDK_JAVA_OPTIONS='-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005'
@@ -43,6 +43,7 @@ export VISUAL=vim
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
+alias vi=nvim
 
 # source local config
 [ -f ~/.bashrc.local ] && . ~/.bashrc.local

@@ -1,10 +1,26 @@
 theme = "Terminal Basic Dark"
+shell-integration-features = no-cursor
 font-feature = "-calt, -liga, -dlig"
 font-family = Menlo
+font-family = monospace
 font-thicken = true
 font-size = 16
-shell-integration-features = no-cursor
+copy-on-select = clipboard
 macos-option-as-alt = true
+
+keybind = alt+1=goto_tab:1
+keybind = alt+2=goto_tab:2
+keybind = alt+3=goto_tab:3
+keybind = alt+4=goto_tab:4
+keybind = alt+5=goto_tab:5
+keybind = alt+6=goto_tab:6
+keybind = alt+7=goto_tab:7
+keybind = alt+8=goto_tab:8
+keybind = alt+9=goto_tab:9
+keybind = alt+0=goto_tab:10
+
+keybind = alt+d=scroll_page_down
+keybind = alt+u=scroll_page_up
 
 keybind = alt+p=previous_tab
 keybind = alt+n=next_tab
