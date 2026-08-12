@@ -1,7 +1,7 @@
 vim.diagnostic.config{virtual_text=true, underline=true}
 vim.lsp.config('*', {
     on_attach = function(client, bufnr)
-        vim.lsp.semantic_tokens.enable(true)
+        vim.lsp.semantic_tokens.enable(false)
         vim.lsp.completion.enable(true, client.id, bufnr, {autotrigger=true})
         vim.lsp.inlay_hint.enable(true)
 
@@ -77,7 +77,7 @@ vim.lsp.config('jdtls', {
         }
     }
 })
-vim.lsp.enable('jdtls')
+-- jdtls is not being enabled by default due to bloated, use [:lsp enable jdtls] instead
 
 -- fetch jdt:// content and load it into a buffer
 vim.api.nvim_create_autocmd('BufReadCmd', {
