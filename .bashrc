@@ -43,7 +43,7 @@ export VISUAL=nvim
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
-alias vi=nvim
+alias vim=nvim
 
 # source local config
 [ -f ~/.bashrc.local ] && . ~/.bashrc.local

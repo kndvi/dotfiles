@@ -11,27 +11,20 @@ func! s:findfiles(cmdarg, _cmdcomp) abort
 	return empty(a:cmdarg) ? l:out : matchfuzzy(l:out, a:cmdarg)
 endfunc
 set findfunc=s:findfiles
+nmap <Space>f :find 
+
+" browse buffers/files
+nmap <Space>o <Cmd>ls t<CR>:buffer 
+nmap - <Cmd>Explore<CR>
+au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 
 " extend vim grep abilities with ripgrep
 set grepprg=grep\ -HIrn\ $*
 if executable('rg')
 	set grepprg=rg\ --vimgrep\ --hidden\ -n\ $*
 endif " use [--no-ignore] for wildcard
-
-" browse git modified/untracked files
-func! s:gitfiles(arglead, _cmdline, _cursorpos) abort
-	let l:out = systemlist('git ls-files -m -o --exclude-standard 2>/dev/null')
-	if v:shell_error != 0 || empty(l:out) | return [] | endif
-	return empty(a:arglead) ? l:out : matchfuzzy(l:out, a:arglead)
-endfunc
-command! -nargs=1 -complete=customlist,<SID>gitfiles Gfiles exe 'edit ' . fnameescape(<q-args>)
-
-" background tags generation
-func! s:gentags() abort
-	let l:job = jobstart(['ctags', '-R', '.'], {'in_io': 'null', 'out_io': 'null', 'err_io': 'null'})
-	echo 'generating tags, job: ' . l:job
-endfunc
-command! -nargs=0 Ctags call <SID>gentags()
+nmap <Space>g :grep! -i ''<Left>
+vmap <Space>g "1y:grep! '<C-r>1'<Left>
 
 " yank/paste to/from system clipboard
 " all motions work the same as normal [y]
@@ -40,11 +33,6 @@ xmap <Space>y "+y
 nmap <Space>p "+p
 xmap <Space>p "+p
 nmap <Space>P "+P
-
-" browse buffers/files
-nmap <Space>o <Cmd>ls t<CR>:buffer 
-nmap - <Cmd>Explore<CR>
-au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 
 " open the quickfix window whenever a qf command is executed
 au QuickFixCmdPost [^l]* cwindow
@@ -64,6 +52,15 @@ if has('nvim')
 	au FileType cpp,java,python,javascript,typescript lua vim.treesitter.start()
 	au TextYankPost * silent! lua vim.hl.on_yank()
 	lua vim.filetype.add{pattern={['.*%.log.*']='messages'}, extension={psql='sql'}}
+
+	" background tags generation
+	func! s:gentags() abort
+		let l:job = jobstart(['ctags', '-R', '.'], {
+					\ 'in_io': 'null',
+					\ 'out_io': 'null', 'err_io': 'null'})
+		echo 'generating tags, job: ' . l:job
+	endfunc
+	command! -nargs=0 Ctags call <SID>gentags()
 
 	" load lua stuff
 	lua require'lsconf'
