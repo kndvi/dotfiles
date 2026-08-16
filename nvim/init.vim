@@ -39,6 +39,9 @@ au QuickFixCmdPost [^l]* cwindow
 au FileType bash,sh,lua setl ts=4 et
 
 if has('nvim')
+	au TextYankPost * silent! lua vim.hl.on_yank()
+	lua vim.filetype.add{pattern={['.*%.log.*']='messages'}, extension={psql='sql'}}
+
 	" unload redundant providers
 	let g:loaded_node_provider = 0
 	let g:loaded_perl_provider = 0
@@ -47,11 +50,6 @@ if has('nvim')
 	let g:loaded_matchit = 1
 	set completeopt+=menuone,noselect
 	set undofile inccommand=split
-
-	" some along with built-in ones
-	au FileType cpp,java,python,javascript,typescript lua vim.treesitter.start()
-	au TextYankPost * silent! lua vim.hl.on_yank()
-	lua vim.filetype.add{pattern={['.*%.log.*']='messages'}, extension={psql='sql'}}
 
 	" background tags generation
 	func! s:gentags() abort
