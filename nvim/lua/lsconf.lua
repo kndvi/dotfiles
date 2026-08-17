@@ -5,18 +5,46 @@ vim.lsp.config('*', {
         vim.lsp.completion.enable(true, client.id, bufnr, {autotrigger=true})
         vim.lsp.inlay_hint.enable(true)
 
-        -- see [:help vim.lsp.*] for documentation
+        -- see [:help vim.lsp.*] for references
         vim.keymap.set('n', 'gru', function()
             vim.lsp.buf.references{includeDeclaration=false}
         end, {buffer=bufnr}) -- show usages only
     end,
     detached = true,
-}) -- consistent behaviours across language servers
+}) -- same across language servers
 
--- server configs, usually just launch cmd, applicable filetypes and root marker
--- some specific language settings can also be applied
--- can be disabled/terminated by [:lsp disable/stop] command
-local java_home = os.getenv'JDK25'
+-- usually just launch cmd, applicable filetypes and root marker
+-- some specific language settings might also be applied
+vim.lsp.config('clangd', {
+    cmd = {'clangd', '--background-index'},
+    filetypes = {'c', 'cpp', 'objc', 'objcpp', 'cuda'},
+    root_markers = {
+        '.clangd', '.clang-tidy', '.clang-format', 'compile_commands.json',
+        'compile_flags.txt', 'configure.ac', '.git'
+    },
+    capabilities = {
+        offsetEncoding = {'utf-8', 'utf-16'},
+        textDocument = {completion = {editsNearCursor=true}}
+    }
+})
+
+-- python
+vim.lsp.config('pyright', {
+    cmd = {'pyright-langserver', '--stdio'},
+    filetypes = {'python'},
+    root_markers = {
+        'pyrightconfig.json', 'pyproject.toml', 'setup.py',
+        'setup.cfg', 'requirements.txt', 'Pipfile', '.git'
+    },
+    settings = {python = {analysis = {
+        autoSearchPaths = true,
+        diagnosticMode = 'openFilesOnly',
+        useLibraryCodeForTypes = true
+    }}}
+})
+
+-- java
+local java_home = os.getenv'JDTLS_JDK'
 if not java_home then return end -- TODO: required JDK version might be changed in the future
 
 local jdtls_dir = vim.fn.stdpath'data'..'/eclipse.jdt.ls/org.eclipse.jdt.ls.product/target/repository'
@@ -116,4 +144,3 @@ vim.lsp.config('tsserver', {
     root_markers = {'tsconfig.json', 'jsconfig.json', 'package.json', '.git'},
     init_options = {hostInfo='neovim'},
 })
-vim.lsp.enable('tsserver')
