@@ -1,6 +1,6 @@
 set nocp enc=utf-8 noswf nobk title sw=0 hid
 set incsearch hlsearch ignorecase smartcase
-set showmatch splitright ruler
+set showmatch splitbelow splitright ruler
 set ut=256 wildoptions+=fuzzy nu rnu list
 let &showbreak = '+++ '
 
