@@ -1,5 +1,3 @@
-setl tabstop=4 et
-
 if !empty(findfile('pom.xml', '.;'))
 	setl makeprg=mvn\ package\ -DskipTests\ -T\ 1C\ -am
 	setl errorformat=[ERROR]\ %f:[%l\\,%c]\ %m

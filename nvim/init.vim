@@ -1,6 +1,7 @@
-set nocp enc=utf-8 noswf nobk title sw=0 hid
+set nocp enc=utf-8 noswf nobk title hid
 set incsearch hlsearch ignorecase smartcase
 set showmatch splitbelow splitright ruler
+set tabstop=4 shiftwidth=0 expandtab
 set ut=256 wildoptions+=fuzzy nu rnu list
 let &showbreak = '+++ '
 
@@ -36,7 +37,7 @@ nmap <Space>P "+P
 
 " open the quickfix window whenever a qf command is executed
 au QuickFixCmdPost [^l]* cwindow
-au FileType bash,sh,lua setl ts=4 et
+au FileType vim setl ts=8 noet
 
 if has('nvim')
 	au TextYankPost * silent! lua vim.hl.on_yank()
