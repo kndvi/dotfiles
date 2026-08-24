@@ -4,12 +4,8 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo apt-get update && sudo apt-get upgrade -y
-        sudo apt-get install -y git bash tmux neovim tree ncdu htop universal-ctags
-        sudo apt-get install -y ripgrep wl-clipboard thermald jq pandoc mutt
-
-        echo "disable dash to dock hot-keys on ubuntu"
-        gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+        sudo dnf upgrade -y
+        sudo dnf install -y git bash tmux neovim tree ncdu htop wl-clipboard ctags ripgrep thermald jq pandoc
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -22,7 +18,7 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux neovim tree ncdu htop ripgrep universal-ctags jq pandoc bash-completion@2
+        brew install git bash tmux neovim tree ncdu htop universal-ctags ripgrep jq pandoc bash-completion@2
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
