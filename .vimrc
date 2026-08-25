@@ -1,10 +1,9 @@
 set nocp enc=utf-8 noml noswf nobk title hid re=2 ar
 set ts=4 sw=0 et autoindent showmatch sb spr
 set incsearch hlsearch ignorecase smartcase smarttab
-set list lcs=tab:>\ ,trail:-,nbsp:+ pt=<F2>
-set wildoptions=pum,tagfile,fuzzy wcm=<C-z>
+set lcs=tab:>\ ,trail:-,nbsp:+ list wop=pum,tagfile,fuzzy
 let &showbreak = '+++ '
-set mouse=a mousem=popup_setpos ruler nu rnu
+set mouse=a mousem=popup_setpos pt=<F2> ruler nu rnu
 filetype plugin indent on
 syntax enable
 
@@ -15,12 +14,7 @@ func! s:findfiles(cmdarg, _cmdcomp) abort
 	return empty(a:cmdarg) ? l:out : matchfuzzy(l:out, a:cmdarg)
 endfunc
 set findfunc=s:findfiles
-nmap <Space>f :find 
-
-" browse buffers/files
-nmap <Space>o <Cmd>ls t<CR>:buffer 
-nmap - <Cmd>Explore<CR>
-au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
+nmap <leader>f :find 
 
 " extend vim grep abilities with ripgrep
 set grepprg=grep\ -HIrn\ $*
@@ -28,33 +22,35 @@ if executable('rg')
 	set grepprg=rg\ --vimgrep\ --hidden\ -n\ $*
 	set grepformat^=%f:%l:%c:%m
 endif " use [--no-ignore] for wildcard
-nmap <Space>g :grep! -i ''<Left>
-vmap <Space>g "1y:grep! '<C-r>1'<Left>
+nmap <leader>g :grep! -i ''<Left>
+vmap <leader>g "1y:grep! '<C-r>1'<Left>
+
+" browse buffers/files
+nmap <leader>b <Cmd>ls t<CR>:buffer 
+nmap - <Cmd>Explore<CR>
+au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 
 " background tags generation
 func! s:gentags() abort
-	let l:job = job_start(['ctags', '-R', '.'], {'in_io': 'null', 'out_io': 'null', 'err_io': 'null'})
+	let l:job = job_start(['ctags', '-R', '.'], {
+				\ 'in_io': 'null',
+				\ 'out_io': 'null', 'err_io': 'null'})
 	echo 'generating tags, job: ' . l:job
 endfunc
 command! -nargs=0 Ctags call <SID>gentags()
 
 " yank/paste to/from system clipboard
 " all motions work the same as normal [y]
-nmap <Space>y "+y
-xmap <Space>y "+y
-nmap <Space>p "+p
-xmap <Space>p "+p
-nmap <Space>P "+P
+nmap <leader>y "+y
+xmap <leader>y "+y
+nmap <leader>p "+p
+xmap <leader>p "+p
+nmap <leader>P "+P
 
 " open the quickfix window whenever a qf command is executed
 au QuickFixCmdPost [^l]* cwindow
 au FileType vim setl ts=8 noet
 nmap <C-l> <Cmd>noh<Bar>dif!<Bar>redr!<CR>
-
-" browse buffers/files
-nmap <Space>o <Cmd>ls t<CR>:buffer 
-nmap - <Cmd>Explore<CR>
-au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 
 " load useful optional packs
 packadd comment
