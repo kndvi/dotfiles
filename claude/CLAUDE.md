@@ -88,3 +88,7 @@ Debate trade-offs out loud: present every viable option with pros and cons. Iter
 - Target coverage at what matters: core logic, business rules, edge cases, and failure paths, not the coverage percentage itself. A test that doesn't exercise meaningful behavior (e.g. a trivial getter/pass-through) isn't worth adding just to pad the number.
 - Manually sanity-check anything user-facing or externally observable (run the CLI, hit the endpoint, trigger the job); don't rely on unit tests alone.
 `</testing>`
+
+`<documentation_style>`
+When writing documentation or code comments, record only the conclusion and the reason for it, not the path taken to get there. Leave out alternatives considered, back-and-forth, or other brainstorming detail from the discussion that produced the change. Don't transcribe the discussion itself; write down only what's reasonable and valuable, stated concisely.
+`</documentation_style>`
