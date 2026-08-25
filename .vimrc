@@ -26,6 +26,7 @@ au FileType netrw nmap <buffer> <C-c> <Cmd>Rex<CR>
 set grepprg=grep\ -HIrn\ $*
 if executable('rg')
 	set grepprg=rg\ --vimgrep\ --hidden\ -n\ $*
+	set grepformat^=%f:%l:%c:%m
 endif " use [--no-ignore] for wildcard
 nmap <Space>g :grep! -i ''<Left>
 vmap <Space>g "1y:grep! '<C-r>1'<Left>
