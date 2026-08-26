@@ -5,7 +5,8 @@ echo '> installing essential packages'
 case $(uname -s) in
     Linux)
         sudo dnf upgrade -y
-        sudo dnf install -y git bash tmux vim-enhanced vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq thermald
+        sudo dnf install -y git bash tmux vim-enhanced vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq thermald fwupd
+        sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
