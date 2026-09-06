@@ -4,9 +4,11 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo dnf upgrade -y
-        sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq thermald fwupd
-        sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
+        sudo apt-get update && sudo apt-get upgrade -y
+        sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard universal-ctags ripgrep jq thermald
+
+        echo "disable dash to dock hot-keys on ubuntu"
+        gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
