@@ -7,26 +7,30 @@ case $(uname -s) in
         sudo apt-get update && sudo apt-get upgrade -y
         sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard universal-ctags ripgrep jq thermald
 
-        echo "disabling dash to dock hot-keys on ubuntu"
-        gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
-        gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag false
-        gsettings set org.gnome.mutter workspaces-only-on-primary true
-        gsettings set org.gnome.shell.app-switcher current-workspace-only true
-        gsettings set org.gnome.mutter dynamic-workspaces false
-        gsettings set org.gnome.desktop.wm.preferences num-workspaces 5
+        if command -v gsettings >/dev/null 2>&1; then
+            echo 'disabling dash to dock hot-keys on ubuntu'
+            gsettings set org.gnome.shell.extensions.dash-to-dock hot-keys false
+            gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag false
+            gsettings set org.gnome.mutter workspaces-only-on-primary true
+            gsettings set org.gnome.shell.app-switcher current-workspace-only true
+            gsettings set org.gnome.mutter dynamic-workspaces false
+            gsettings set org.gnome.desktop.wm.preferences num-workspaces 5
 
-        echo "configuring gnome keybindings"
-        gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Shift><Super>1']"
-        gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Shift><Super>2']"
-        gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Shift><Super>3']"
-        gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Shift><Super>4']"
-        gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Shift><Super>5']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
-        gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Super>5']"
-        gsettings set org.gnome.desktop.wm.keybindings close "['<Control>q']"
+            echo 'configuring gnome keybindings'
+            gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-1 "['<Shift><Super>1']"
+            gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-2 "['<Shift><Super>2']"
+            gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-3 "['<Shift><Super>3']"
+            gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-4 "['<Shift><Super>4']"
+            gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last "['<Shift><Super>5']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-1 "['<Super>1']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-2 "['<Super>2']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-3 "['<Super>3']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-4 "['<Super>4']"
+            gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last "['<Super>5']"
+            gsettings set org.gnome.desktop.wm.keybindings close "['<Control>q']"
+        else
+            echo 'gsettings not found, skipping gnome settings'
+        fi
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
