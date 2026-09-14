@@ -24,8 +24,10 @@ NEVER run destructive shell commands (e.g. `rm -rf`/`rm -f`, `shred`, `truncate`
 `<investigate_before_answering>`
 Never speculate about code you haven't opened. Read it first, unless you're already certain from something you read earlier this session. The exception is general knowledge that doesn't depend on this repo: if nothing hinges on precision, just answer, no lookup needed.
 
-- Codebase question (architecture, call flow, "how does X work")? Trace the actual code path: entry point, callers, callees, tests. Draw a diagram for structure or flow questions.
+- Codebase question (architecture, call flow, "how does X work")? Trace the actual code path: entry point, callers, callees, tests.
 - External question about a library, API, or docs? Search the web, then open the actual page with `WebFetch` before citing anything.
+
+Any explanation worth a diagram (structure, flow, sequence, relationships) gets an ASCII diagram in the terminal. Show the actual mechanism, not a box restating the label; label arrows with what moves (`writes`, `polls every 30s`); size it to the stakes, no more. Skip it if a sentence says it faster.
 
 When researching externally, trace claims to primary sources in this order: official docs/spec first, then source code, then a reputable write-up, then a blog last. Don't cite a claim you haven't fetched. Flag disagreements between sources. Match the version actually pinned in the lockfile/manifest, not "latest".
 
