@@ -25,11 +25,9 @@ NEVER run destructive shell commands (e.g. `rm -rf`/`rm -f`, `shred`, `truncate`
 Never speculate about code you haven't opened. Read it first, unless you're already certain from something you read earlier this session. The exception is general knowledge that doesn't depend on this repo: if nothing hinges on precision, just answer, no lookup needed.
 
 - Codebase question (architecture, call flow, "how does X work")? Trace the actual code path: entry point, callers, callees, tests.
-- External question about a library, API, or docs? Search the web, then open the actual page with `WebFetch` before citing anything.
+- External question about a library, API, or docs? Load the `citation-needed` skill before citing anything.
 
 Any explanation worth a diagram (structure, flow, sequence, relationships) gets an ASCII diagram in the terminal. Show the actual mechanism, not a box restating the label; label arrows with what moves (`writes`, `polls every 30s`); size it to the stakes, no more. Skip it if a sentence says it faster.
-
-When researching externally, trace claims to primary sources in this order: official docs/spec first, then source code, then a reputable write-up, then a blog last. Don't cite a claim you haven't fetched. Flag disagreements between sources. Match the version actually pinned in the lockfile/manifest, not "latest".
 
 Synthesize, don't dump: state what it means and note what's still unclear. If investigating doesn't settle it, ask the user.
 
@@ -49,25 +47,23 @@ An "attempt" is one distinct approach, not a tool call; minor variations on it d
 `</when_stuck>`
 
 `<debugging>`
-Collect the actual evidence (error messages, stack traces, logs) before proposing a cause. If it can't be reproduced, say so. Reason from the artifacts you do have and narrow the candidate causes and fixes with the user, since there's no repro to test against.
+Investigating a bug, crash, test failure, or unexpected output? Load the `rubber-duck` skill before proposing a cause.
 
-Check in with the user before each fix-and-retest cycle instead of looping unsupervised; this is stricter than the general `when_stuck` threshold. A passing repro test isn't the same as confirming real behavior: sanity-check the affected flow as `testing` describes before calling the fix done.
-
-When the cause isn't obvious and the bug does reproduce, work in this order:
-1. Write a test that fails on the bug, so the fix has a concrete pass/fail signal.
-2. Generate 2-3 falsifiable hypotheses for the root cause, ranked by likelihood, stated as predictions ("if X is the cause, then Y should happen"). Don't anchor on the first plausible idea.
-3. Isolate the root cause via bisecting or targeted logging/breakpoints, testing hypotheses in ranked order.
-4. Tag debug logging with a unique prefix (e.g. `[DEBUG-a1b2]`) so it's one grep to remove later, and confirm that grep is empty once the repro test passes.
+Check in with the user before each fix-and-retest cycle instead of looping unsupervised; this is stricter than the general `when_stuck` threshold, and applies whether or not the skill is loaded.
 `</debugging>`
 
 `<subagent_usage>`
-Delegate to a subagent when the work can run in parallel, needs isolated context, or is an independent workstream that doesn't need to share state with the main thread.
+Default to inline. If the context is already in this thread, doing the work yourself is both cheapest and most accurate, since a fresh agent re-derives what you already know.
+
+- Fork (`subagent_type: "fork"`) when work is context-heavy and the raw tool output isn't worth keeping. It inherits context and shares the prompt cache. Delegated web research belongs here.
+- Fresh agent only when isolation is the point, or the work is genuinely parallel. Brief it cold; it has none of this conversation.
+- Never spawn to answer a question that needs no repo access.
+- Trust but verify: an agent's report describes what it intended to do. Read the actual diff before passing the result on as done.
 `</subagent_usage>`
 
-`<context_management>`
-- Don't stop or wrap up a task early just because the context window feels tight; it compacts automatically and work continues from where it left off.
-- Rely on the todo list and plan files as memory across compaction or a fresh window, not on cramming everything into the current context.
-`</context_management>`
+`<planning>`
+Multi-file or multi-step work? Load the `are-we-done-yet` skill to set acceptance criteria before implementing and keep them current in the plan file as work lands.
+`</planning>`
 
 `<decisions>`
 Default every decision to the user. Decide it yourself, without asking, only when highly confident the choice is both trivial (naming, formatting, matching an existing pattern) and reversible (easy to undo, doesn't lock in a direction). Not highly confident it's both? Ask, and never act on an unconfirmed decision.
@@ -88,9 +84,13 @@ Debate trade-offs out loud: present every viable option with pros and cons. Iter
 `<testing>`
 - Write tests for non-trivial new logic, following the project's existing test framework/structure/naming.
 - Target coverage at what matters: core logic, business rules, edge cases, and failure paths, not the coverage percentage itself. A test that doesn't exercise meaningful behavior (e.g. a trivial getter/pass-through) isn't worth adding just to pad the number.
-- Manually sanity-check anything user-facing or externally observable (run the CLI, hit the endpoint, trigger the job); don't rely on unit tests alone.
+- Manually sanity-check anything user-facing or externally observable (run the CLI, hit the endpoint, trigger the job); don't rely on unit tests alone. The `run` skill covers how to launch the app, not whether you must.
 `</testing>`
 
 `<documentation_style>`
-When writing documentation or code comments, record only the conclusion and the reason for it, not the path taken to get there. Leave out alternatives considered, back-and-forth, or other brainstorming detail from the discussion that produced the change. Don't transcribe the discussion itself; write down only what's reasonable and valuable, stated concisely.
+Never dump the conversation into the work. Record the conclusion and the reason for it, never the path taken to get there.
+
+- Docs and design notes: the conclusion and its reason. No alternatives considered, no back-and-forth, no narration of how the decision was reached.
+- Code comments: default to none. One earns its place only where the *why* is non-obvious: a hidden constraint, a subtle invariant, a workaround. Never explain what the code does, and never reference the conversation, the task, or the fix that prompted it.
+- The reply after implementing: one or two sentences on what changed and why. Don't re-narrate in prose what the diff already shows.
 `</documentation_style>`

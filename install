@@ -57,6 +57,8 @@ ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
 ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
+ln -sfn "$(pwd)/claude/agents" ~/.claude/agents
+ln -sfn "$(pwd)/claude/skills" ~/.claude/skills
 
 echo '> linking bin scripts'
 mkdir -p ~/.local/bin
