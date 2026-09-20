@@ -4,8 +4,9 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        sudo apt-get update && sudo apt-get upgrade -y
-        sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard universal-ctags ripgrep jq thermald
+        sudo dnf upgrade -y
+        sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq thermald fwupd
+        sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -24,7 +25,7 @@ case $(uname -s) in
 esac
 
 echo '> linking dotfiles'
-mkdir -p ~/.config ~/work ~/lab ~/.claude
+mkdir -p ~/.config ~/work ~/lab ~/.claude/skills
 ln -sfn "$(pwd)/.vimrc" ~/.vimrc
 ln -sfn "$(pwd)/.tmux.conf" ~/.tmux.conf
 ln -sfn "$(pwd)/.gitignore" ~/.gitignore
@@ -32,7 +33,7 @@ ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
 ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
-ln -sfn "$(pwd)/claude/skills" ~/.claude/skills
+cp -rf "$(pwd)/claude/skills/." ~/.claude/skills/
 
 echo '> linking bin scripts'
 mkdir -p ~/.local/bin
@@ -42,6 +43,7 @@ done
 
 echo '> configuring git'
 git config --global core.excludesFile ~/.gitignore
+git config --global user.name 'Khoa Nguyen'
 git config --global push.autoSetupRemote true
 git config --global pull.rebase true
 git config --global core.editor vim
