@@ -5,7 +5,8 @@ echo '> installing essential packages'
 case $(uname -s) in
     Linux)
         sudo dnf upgrade -y
-        sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq thermald fwupd
+        sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard ctags ripgrep jq
+        sudo dnf install -y thermald fwupd cascadia-mono-fonts
         sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
         ;;
     Darwin)
@@ -19,7 +20,8 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux tree ncdu htop universal-ctags ripgrep jq bash-completion@2
+        brew install git bash tmux tree ncdu htop universal-ctags ripgrep jq
+        brew install bash-completion@2 font-cascadia-mono
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
