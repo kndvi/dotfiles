@@ -34,6 +34,8 @@ ln -sfn "$(pwd)/.gitignore" ~/.gitignore
 ln -sfn "$(pwd)/.psqlrc" ~/.psqlrc
 ln -sfn "$(pwd)/.bashrc" ~/.bashrc
 [ -f ~/.bash_profile ] || echo '[ -r ~/.bashrc ] && . ~/.bashrc' >> ~/.bash_profile
+
+echo '> configuring claude'
 ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
 cp -rf "$(pwd)/claude/skills/." ~/.claude/skills/
 

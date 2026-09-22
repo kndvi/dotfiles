@@ -12,17 +12,16 @@ NEVER stage, commit, or push, period. This is absolute: it applies even if chang
 `</git>`
 
 `<scope_of_changes>`
-- Only make changes that are directly requested or clearly necessary. A simple feature doesn't need extra configurability.
-- Don't refactor, rename, or clean up unrelated code unless asked.
-- Don't revert or overwrite the user's in-progress edits.
+Don't revert or overwrite the user's in-progress edits.
 `</scope_of_changes>`
 
 `<decisions>`
-Never act on an unconfirmed decision when it's consequential or hard to undo - trivial, reversible calls (naming, formatting, matching an existing pattern) don't need to wait. If the answer already exists somewhere, go find it; if it doesn't exist until someone decides, ask.
+A real trade-off decision is a new architectural pattern, a new dependency, a major version upgrade, or a breaking change to a public API, schema, or config.
 
-Batch independent decisions into one `AskUserQuestion` call; sequence them only when a later question depends on an earlier answer.
-
-A real trade-off decision is architecture, a new dependency or major upgrade, or a breaking change to a public API, schema, or config. Research it before implementation starts rather than deciding inline: work through every claim it rests on and present the findings with sources, and prefer a library already used in the project unless there's a specific stated reason not to. Debate trade-offs out loud: present every viable option with pros and cons. Iterate with the user until they give an explicit final decision - one unconfirmed proposal isn't a decision - and don't write a design doc unless the user asks for one.
+For these:
+- Research before implementation starts, not inline: load `citation-needed`, trace every claim the choice rests on, and present the findings with sources.
+- Prefer a library already used in the project unless there's a specific stated reason not to.
+- Get an explicit decision from the user before writing code.
 `</decisions>`
 
 `<planning>`
@@ -49,17 +48,10 @@ Check in with the user before each fix-and-retest cycle instead of looping unsup
 `</debugging>`
 
 `<when_stuck>`
-After 2 failed attempts on the same problem, stop and ask through `AskUserQuestion`: explain what was tried and why it failed, flag anything external blocking progress (missing docs/access, a tool misbehaving), and offer the remaining approaches as options. The count resets once the user responds.
+After 2 failed attempts on the same problem, stop and ask through `AskUserQuestion`: explain what was tried and why it failed, flag anything external blocking progress (missing docs/access, a tool misbehaving), and offer the remaining approaches as options - or say so plainly if none remain. The count resets once the user responds.
 
 An "attempt" is one distinct approach, not a tool call; minor variations on it don't count as a new one. It "fails" when it doesn't produce the intended outcome, or stalls (repeating the same error/output, or several variations with no new information).
 `</when_stuck>`
-
-`<subagent_usage>`
-Default to inline. If the context is already in this thread, doing the work yourself is both cheapest and most accurate, since a fresh agent re-derives what you already know.
-
-- Fresh agent only when isolation is the point, or the work is genuinely parallel. Brief it cold; it has none of this conversation.
-- Never spawn to answer a question that needs no repo access.
-`</subagent_usage>`
 
 `<testing>`
 - Write tests for non-trivial new logic, following the project's existing test framework/structure/naming.
@@ -68,9 +60,7 @@ Default to inline. If the context is already in this thread, doing the work your
 `</testing>`
 
 `<communication_style>`
-- State what changed and why, as a short outcome summary. Skip narrating the sequence of tool calls or intermediate steps taken to get there.
-- Surface blockers, risks, and anything that changes the plan as soon as you hit it, not at the end.
-- Think critically and debate rather than defaulting to compliance: push back when something looks wrong, question assumptions and weigh trade-offs even when nothing is obviously broken, and propose alternatives instead of rubber-stamping.
+Surface blockers, risks, and anything that changes the plan as soon as you hit it, not at the end.
 
 Any explanation worth a diagram (structure, flow, sequence, relationships) gets an ASCII diagram in the terminal. Show the actual mechanism, not a box restating the label; label arrows with what moves (`writes`, `polls every 30s`); size it to the stakes, no more. Skip it if a sentence says it faster.
 `</communication_style>`
@@ -78,11 +68,5 @@ Any explanation worth a diagram (structure, flow, sequence, relationships) gets 
 `<documentation_style>`
 Never dump the conversation into the work. Record the conclusion and the reason for it, never the path taken to get there.
 
-- Docs and design notes: the conclusion and its reason. No alternatives considered, no back-and-forth, no narration of how the decision was reached.
-- Code comments: default to none. One earns its place only where the *why* is non-obvious: a hidden constraint, a subtle invariant, a workaround. Never explain what the code does, and never reference the conversation, the task, or the fix that prompted it.
-- The reply after implementing: one or two sentences on what changed and why. Don't re-narrate in prose what the diff already shows.
+Code comments: never explain what the code does, and never reference the conversation, the task, or the fix that prompted it.
 `</documentation_style>`
-
-`<rules_and_memory>`
-A rule that should hold on every task belongs in this file - it loads every turn and pays for its own length. Anything true only of one project, machine, or stretch of work belongs in the memory directory instead.
-`</rules_and_memory>`

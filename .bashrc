@@ -40,6 +40,9 @@ export VISUAL=vim
 # jdb -connect "com.sun.jdi.SocketAttach:hostname=localhost,port=5005"
 # unset JDK_JAVA_OPTIONS
 
+# claude code hybrid model alias
+export ANTHROPIC_MODEL=opusplan
+
 alias grep='grep --color=auto'
 alias ls='ls --color=auto'
 alias myip='dig +short txt ch whoami.cloudflare @1.0.0.1'
