@@ -5,21 +5,16 @@ set -eu
 echo '> installing essential packages'
 case $(uname -s) in
     Linux)
-        . /etc/os-release
-        case "$ID ${ID_LIKE:-}" in
-            *fedora*)
-                sudo dnf upgrade -y
-                sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard
-                sudo dnf install -y ctags ripgrep jq thermald fwupd
-                sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
-                ;;
-            *debian*)
-                sudo apt-get update && sudo apt-get upgrade -y
-                sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard
-                sudo apt-get universal-ctags ripgrep jq thermald fwupd
-                ;;
-            *) echo "! unsupported linux distro: only fedora and debian/ubuntu" >&2; exit 1 ;;
-        esac
+        sudo apt-get update && sudo apt-get upgrade -y
+        sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard universal-ctags
+        sudo apt-get install -y ripgrep jq thermald fwupd fonts-cascadia-code
+
+        echo '> configuring preferred gnome options'
+        gsettings set org.gnome.shell.app-switcher current-workspace-only true
+        gsettings set org.gnome.mutter workspaces-only-on-primary true
+        gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag false
+        gsettings set org.gnome.mutter dynamic-workspaces false
+        gsettings set org.gnome.desktop.wm.preferences num-workspaces 5
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {
@@ -32,7 +27,7 @@ case $(uname -s) in
             eval "$(/opt/homebrew/bin/brew shellenv)"
         }
         brew update
-        brew install git bash tmux tree ncdu htop universal-ctags ripgrep jq bash-completion@2
+        brew install git bash tmux tree ncdu htop universal-ctags ripgrep jq bash-completion@2 font-cascadia-mono
         ;;
     *)  echo '! unsupported os: only linux and mac' >&2; exit 1 ;;
 esac
