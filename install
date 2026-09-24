@@ -9,16 +9,16 @@ case $(uname -s) in
         case "$ID ${ID_LIKE:-}" in
             *fedora*)
                 sudo dnf upgrade -y
-                sudo dnf install -y git bash tmux vim-X11 tree ncdu htop xclip
+                sudo dnf install -y git bash tmux vim-X11 tree ncdu htop wl-clipboard
                 sudo dnf install -y ctags ripgrep jq thermald fwupd
                 sudo update-alternatives --install /usr/bin/vim vim /usr/bin/vimx 55
                 ;;
             *debian*)
                 sudo apt-get update && sudo apt-get upgrade -y
-                sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop xclip
-                sudo apt-get install -y universal-ctags ripgrep jq thermald fwupd
+                sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard
+                sudo apt-get universal-ctags ripgrep jq thermald fwupd
                 ;;
-            *) echo "! unsupported linux distro: only fedora and debian" >&2; exit 1 ;;
+            *) echo "! unsupported linux distro: only fedora and debian/ubuntu" >&2; exit 1 ;;
         esac
         ;;
     Darwin)
