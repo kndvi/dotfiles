@@ -1,6 +1,10 @@
+# darwin
 .DS_Store
+
+# ctags
 tags
 tags.lock
 tags.temp
 
+# claude
 **/.claude/settings.local.json

@@ -1,4 +1,5 @@
 #!/bin/sh
+# bootstrap script, safe to rerun
 set -eu
 
 echo '> installing essential packages'
