@@ -1,6 +1,7 @@
 #!/bin/sh
 # move video decode onto the intel gpu, fill firmware gaps, set up flathub,
-# and install thermald only where lenovo firmware isn't already doing its job.
+# install thermald only where lenovo firmware isn't already doing its job,
+# and keep gnome software from running in the background.
 # debian 13+ only. safe to rerun.
 #
 #   dytc_lapmode sysfs file present?
@@ -19,6 +20,8 @@
 #   undo:
 #     sudo apt purge thermald                    # only if this script installed it and you don't want it
 #     remove the " non-free" this script added to your apt sources
+#     rm ~/.config/autostart/org.gnome.Software.desktop
+#     gsettings reset org.gnome.desktop.search-providers disabled
 set -eu
 
 grep -qs '^ID=debian$' /etc/os-release || { echo '! not debian, nothing to do' >&2; exit 1; }
@@ -40,9 +43,8 @@ fi
 
 echo '> installing gpu video decode, codecs, firmware, flatpak'
 sudo apt-get install -y intel-media-va-driver-non-free vainfo intel-gpu-tools
-sudo apt-get install -y ffmpeg mpv
 sudo apt-get install -y intel-microcode firmware-intel-graphics firmware-sof-signed
-sudo apt-get install -y flatpak gnome-software-plugin-flatpak
+sudo apt-get install -y ffmpeg mpv flatpak
 echo '* apt may have removed va-driver-all: expected, it conflicts with the non-free driver'
 
 lapmode=/sys/devices/platform/thinkpad_acpi/dytc_lapmode
@@ -61,6 +63,11 @@ grep -q '^hwdec=' "$mpv_conf" || { echo '> enabling hardware decode in mpv'; ech
 
 echo '> adding the flathub remote'
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo '> disabling gnome software background service (apt and flatpak cli only)'
+mkdir -p ~/.config/autostart
+printf '[Desktop Entry]\nType=Application\nName=GNOME Software\nHidden=true\n' > ~/.config/autostart/org.gnome.Software.desktop
+gsettings set org.gnome.desktop.search-providers disabled "['org.gnome.Software.desktop']"
 
 echo '* reboot to load the new microcode and firmware'
 # vim: ft=sh
