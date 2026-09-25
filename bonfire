@@ -19,6 +19,9 @@ case $(uname -s) in
         gsettings set org.gnome.desktop.peripherals.touchpad tap-and-drag false
         gsettings set org.gnome.mutter dynamic-workspaces false
         gsettings set org.gnome.desktop.wm.preferences num-workspaces 5
+
+        echo '> disabling background file indexing'
+        systemctl --user mask localsearch-3.service localsearch-control-3.service localsearch-writeback-3.service
         ;;
     Darwin)
         xcode-select -p >/dev/null 2>&1 || {

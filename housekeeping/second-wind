@@ -21,17 +21,18 @@
 #     remove the " non-free" this script added to your apt sources
 set -eu
 
-[ -e /etc/debian_version ] || { echo '! not debian, nothing to do' >&2; exit 1; }
+grep -qs '^ID=debian$' /etc/os-release || { echo '! not debian, nothing to do' >&2; exit 1; }
 
 echo '> enabling the non-free component (needed for av1/vc-1 video decode)'
 deb822=/etc/apt/sources.list.d/debian.sources
-if [ -e "$deb822" ] && grep -q '^Components:' "$deb822" && ! grep -qw non-free "$deb822"; then
-    cp "$deb822" "$deb822.bak"
-    sed -i '/^Components:/ s/$/ non-free/' "$deb822"
+non_free_re='(^|[[:space:]])non-free([[:space:]]|$)'
+if [ -e "$deb822" ] && grep -q '^Components:' "$deb822" && ! grep -qE "$non_free_re" "$deb822"; then
+    sudo cp "$deb822" "$deb822.bak"
+    sudo sed -i '/^Components:/ s/$/ non-free/' "$deb822"
     sudo apt-get update
-elif [ -e /etc/apt/sources.list ] && grep -q '^deb .*debian\.org.*main' /etc/apt/sources.list && ! grep -qw non-free /etc/apt/sources.list; then
-    cp /etc/apt/sources.list /etc/apt/sources.list.bak
-    sed -i '/^deb\(-src\)\? .*debian\.org/ s/$/ non-free/' /etc/apt/sources.list
+elif [ -e /etc/apt/sources.list ] && grep -q '^deb .*debian\.org.*main' /etc/apt/sources.list && ! grep -qE "$non_free_re" /etc/apt/sources.list; then
+    sudo cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sudo sed -i '/^deb\(-src\)\? .*debian\.org/ s/$/ non-free/' /etc/apt/sources.list
     sudo apt-get update
 else
     echo '* non-free already enabled, or sources not recognized: leaving apt sources alone'
