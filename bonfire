@@ -9,6 +9,10 @@ case $(uname -s) in
         sudo apt-get install -y git bash tmux vim-gtk3 tree ncdu htop wl-clipboard universal-ctags
         sudo apt-get install -y ripgrep jq thermald fwupd fonts-cascadia-code
 
+        echo '> configuring fingerprint unlock'
+        sudo apt-get install -y fprintd libpam-fprintd
+        sudo pam-auth-update --enable fprintd
+
         echo '> configuring preferred gnome options'
         gsettings set org.gnome.shell.app-switcher current-workspace-only true
         gsettings set org.gnome.mutter workspaces-only-on-primary true
@@ -45,9 +49,9 @@ echo '> configuring claude'
 ln -sfn "$(pwd)/claude/CLAUDE.md" ~/.claude/CLAUDE.md
 cp -rf "$(pwd)/claude/skills/." ~/.claude/skills/
 
-echo '> linking bin scripts'
+echo '> linking inventory scripts'
 mkdir -p ~/.local/bin
-for f in "$(pwd)/localbin"/*; do
+for f in "$(pwd)/inventory"/*; do
     ln -sfn "$f" "$HOME/.local/bin/$(basename "$f")"
 done
 

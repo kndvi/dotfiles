@@ -1,0 +1,76 @@
+#!/bin/sh
+# bind luks-encrypted devices in /etc/crypttab to the tpm via clevis, so the
+# passphrase is only needed as a fallback. safe to rerun.
+#
+# usage: housekeeping/skill-issue [pcr_ids]
+#   pcr_ids   comma separated tpm2 pcr list to seal against (default: 7,8,9)
+#             use "7" for a looser binding that survives kernel/initrd updates
+#
+#   UEFI ─measures─▶ PCR 0-7 ─▶ shim ─▶ GRUB ─measures cmdline/commands─▶ PCR 8
+#                                            ─measures kernel/initrd/grub.cfg─▶ PCR 9
+#                                            ─loads─▶ kernel + initramfs
+#   initramfs (initramfs-tools)
+#     cryptroot ──reads crypttab──▶ prompts "please unlock disk" ◀──reads── $PASSFIFO
+#     clevis loop (background) ──asks tpm to unseal, only if pcrs match──▶ $PASSFIFO
+#     whichever arrives first (tpm key or typed passphrase) opens luks ─▶ lvm ─▶ root
+#
+#   what each pcr covers, and when it changes (so you know when to expect the
+#   passphrase prompt instead of an automatic unlock):
+#     7  secure boot state + firmware cert dbs (pk/kek/db/dbx)
+#        changes: secure boot toggled, its keys/dbx updated, some firmware updates
+#     8  grub commands + kernel cmdline
+#        changes: every kernel update (update-grub writes a new "linux" line)
+#     9  every file grub reads, including the kernel and initrd
+#        changes: every kernel or initramfs rebuild
+#
+#   after any of the above: boot with the passphrase once, then rerun this
+#   script to reseal to the new pcr values.
+#
+#   never remove the passphrase keyslot: it is the only recovery path if the
+#   tpm is cleared or the board is replaced, since the tpm binding dies with it.
+#
+#   inspect:  sudo clevis luks list -d <dev>
+#             sudo tpm2_pcrread sha256:7,8,9
+#   undo:     sudo clevis luks unbind -d <dev> -s <slot>
+set -eu
+
+pcrs="${1:-7,8,9}"
+pcr_json="{\"pcr_bank\":\"sha256\",\"pcr_ids\":\"$pcrs\"}"
+
+[ -e /dev/tpmrm0 ] || { echo '! no /dev/tpmrm0, is there a tpm2 chip enabled in firmware?' >&2; exit 1; }
+[ -s /etc/crypttab ] || { echo '! /etc/crypttab is empty, nothing to bind' >&2; exit 1; }
+
+echo '> installing tpm2-tools and clevis'
+sudo apt-get install tpm2-tools clevis-tpm2 clevis-luks clevis-initramfs
+
+for src in $(awk '!/^[[:space:]]*#/ && NF>=2 {print $2}' /etc/crypttab); do
+    case "$src" in
+        UUID=*|LABEL=*|PARTUUID=*|PARTLABEL=*) dev=$(sudo findfs "$src" 2>/dev/null || true) ;;
+        *) dev="$src" ;;
+    esac
+    [ -n "$dev" ] && [ -b "$dev" ] || { echo "* skip $src: no such block device"; continue; }
+    sudo cryptsetup isLuks "$dev" 2>/dev/null || { echo "* skip $dev: not luks"; continue; }
+
+    line=$(sudo clevis luks list -d "$dev" 2>/dev/null | grep ' tpm2 ' || true)
+
+    if [ -z "$line" ]; then
+        echo "> $dev has no tpm2 binding, binding to pcr $pcrs"
+        sudo clevis luks bind -d "$dev" tpm2 "$pcr_json"
+        continue
+    fi
+
+    slot=$(printf '%s\n' "$line" | cut -d: -f1 | tr -d '[:space:]')
+    current=$(printf '%s\n' "$line" | sed -n 's/.*"pcr_ids":"\([^"]*\)".*/\1/p')
+
+    if [ "$current" = "$pcrs" ] && [ "$pcrs" = "7" ]; then
+        echo "* $dev already bound to pcr $pcrs"
+    elif [ "$current" = "$pcrs" ]; then
+        echo "> $dev is bound to pcr $pcrs, but may be stale after a kernel/initrd update, reseal it"
+        sudo clevis luks regen -d "$dev" -s "$slot"
+    else
+        echo "> $dev is bound to pcr $current, rebind to pcr $pcrs"
+        sudo clevis luks unbind -d "$dev" -s "$slot"
+        sudo clevis luks bind -d "$dev" tpm2 "$pcr_json"
+    fi
+done
+# vim: ft=sh
