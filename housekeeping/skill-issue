@@ -34,6 +34,8 @@
 #   undo:     sudo clevis luks unbind -d <dev> -s <slot>
 set -eu
 
+[ -e /etc/debian_version ] || { echo '! not debian, nothing to do' >&2; exit 1; }
+
 pcrs="${1:-7,8,9}"
 pcr_json="{\"pcr_bank\":\"sha256\",\"pcr_ids\":\"$pcrs\"}"
 

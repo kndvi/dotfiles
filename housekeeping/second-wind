@@ -1,0 +1,65 @@
+#!/bin/sh
+# move video decode onto the intel gpu, fill firmware gaps, set up flathub,
+# and install thermald only where lenovo firmware isn't already doing its job.
+# debian 13+ only. safe to rerun.
+#
+#   dytc_lapmode sysfs file present?
+#     yes ─▶ lenovo firmware (thinkpad_acpi/dytc) manages thermals already ─▶ skip thermald
+#     no  ─▶ apt install thermald, runs in --adaptive mode
+#
+#   firefox/chromium/totem/mpv ─▶ libva (auto-picks iHD for i915) ─▶
+#     intel-media-va-driver-non-free ─▶ iris xe video engine
+#     (h264/hevc/vp9 decode on the free driver too; av1/vc-1 need non-free)
+#
+#   inspect:
+#     vainfo                                    # decode profiles, look for av1
+#     sudo intel_gpu_top                         # "Video" engine busy % while playing
+#     journalctl -b -u thermald | grep -i "can't run"
+#     cat /sys/firmware/acpi/platform_profile
+#   undo:
+#     sudo apt purge thermald                    # only if this script installed it and you don't want it
+#     remove the " non-free" this script added to your apt sources
+set -eu
+
+[ -e /etc/debian_version ] || { echo '! not debian, nothing to do' >&2; exit 1; }
+
+echo '> enabling the non-free component (needed for av1/vc-1 video decode)'
+deb822=/etc/apt/sources.list.d/debian.sources
+if [ -e "$deb822" ] && grep -q '^Components:' "$deb822" && ! grep -qw non-free "$deb822"; then
+    cp "$deb822" "$deb822.bak"
+    sed -i '/^Components:/ s/$/ non-free/' "$deb822"
+    sudo apt-get update
+elif [ -e /etc/apt/sources.list ] && grep -q '^deb .*debian\.org.*main' /etc/apt/sources.list && ! grep -qw non-free /etc/apt/sources.list; then
+    cp /etc/apt/sources.list /etc/apt/sources.list.bak
+    sed -i '/^deb\(-src\)\? .*debian\.org/ s/$/ non-free/' /etc/apt/sources.list
+    sudo apt-get update
+else
+    echo '* non-free already enabled, or sources not recognized: leaving apt sources alone'
+fi
+
+echo '> installing gpu video decode, codecs, firmware, flatpak'
+sudo apt-get install -y intel-media-va-driver-non-free vainfo intel-gpu-tools
+sudo apt-get install -y ffmpeg mpv
+sudo apt-get install -y intel-microcode firmware-intel-graphics firmware-sof-signed
+sudo apt-get install -y flatpak gnome-software-plugin-flatpak
+echo '* apt may have removed va-driver-all: expected, it conflicts with the non-free driver'
+
+lapmode=/sys/devices/platform/thinkpad_acpi/dytc_lapmode
+if [ -e "$lapmode" ]; then
+    echo '* lenovo firmware manages thermals (dytc_lapmode present), skipping thermald'
+    dpkg -s thermald >/dev/null 2>&1 && echo '* thermald is installed but does nothing here, consider: sudo apt purge thermald'
+else
+    echo '> no dytc_lapmode sensor found, installing thermald'
+    sudo apt-get install -y thermald
+fi
+
+mpv_conf="$HOME/.config/mpv/mpv.conf"
+mkdir -p "$(dirname "$mpv_conf")"
+touch "$mpv_conf"
+grep -q '^hwdec=' "$mpv_conf" || { echo '> enabling hardware decode in mpv'; echo 'hwdec=auto' >> "$mpv_conf"; }
+
+echo '> adding the flathub remote'
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+echo '* reboot to load the new microcode and firmware'
+# vim: ft=sh
